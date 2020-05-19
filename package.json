@@ -8,6 +8,8 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "bulma": "^0.8.2",
+    "bulma-divider": "^0.2.0",
     "bulma-extensions": "^6.2.7",
     "core-js": "^3.6.4",
     "firebase": "^7.14.4",
