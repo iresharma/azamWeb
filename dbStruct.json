@@ -1,0 +1,105 @@
+{
+    "students": {
+        "name": "",
+        "photoUrl": "",
+        "passHash": "",
+        "sid": "",
+        "email": "",
+        "batch": ["batch_id"],
+        "quizes": ["eid"]
+    },
+    "teacher": {
+        "tid": "",
+        "name": "",
+        "passHash": "",
+        "photoUrl": "",
+        "batch": [
+            {
+                "batch_id": "",
+                "student": ["sid"],
+                "name": ""
+            }
+        ],
+        "quizes": ["eid"],
+        "email": ""
+    },
+    "video": {
+        "title": "",
+        "src": "",
+        "subtitle": "",
+        "tid": "",
+        "comments": [
+            {
+                "name": "",
+                "info": "",
+                "created_id": "",
+                "photoUrl": "",
+                "replies": [
+                    {
+                        "name": "",
+                        "info": "",
+                        "created_at": "",
+                        "phtoUrl": ""
+                    }
+                ]
+            }
+        ]
+    },
+    "pdf": {
+        "title": "",
+        "src": "",
+        "subtitle": "",
+        "tid": "",
+        "comments": [
+            {
+                "name": "",
+                "info": "",
+                "created_id": "",
+                "photoUrl": "",
+                "replies": [
+                    {
+                        "name": "",
+                        "info": "",
+                        "created_at": "",
+                        "phtoUrl": ""
+                    }
+                ]
+            }
+        ]
+    },
+    "token": {
+        "token": "",
+        "batch": "batch_id",
+        "nTotal": 1,
+        "nUse": 1,
+        "type": ""
+    },
+    "quiz": {
+        "eid": "",
+        "questions": [
+            {
+                "qid": "",
+                "question": "",
+                "type": "",
+                "mcq": ""
+            }
+        ],
+        "batch": "batch_id"
+    },
+    {
+        "answers": {
+            "id": "eid",
+            "students": [
+                {
+                    "sid": "",
+                    "ans": [
+                        {
+                            "id": "qid",
+                            "ans": "ans"
+                        }
+                    ]
+                }
+            ]
+        }
+    }
+}

@@ -4,7 +4,7 @@
     <navbar v-else home="aim nav-link" live="nav-link aim active" video="nav-link aim" notes=" nav-link aim" />
     <router-view/>
     <footer class="text-right">
-          <!-- <div class="credits">
+          <div class="credits">
             <span>©️</span>
             <span class="current-year">(2020)</span> Made with 
                 <i style="color: red" class="fa fa-heart heart"
@@ -13,14 +13,14 @@
                 by 
                 <a href="http://iresharma.me" target="_blank"> Iresharma and team
                 </a>
-          </div> -->
+          </div>
 </footer>
   </div>
 </template>
 
 <style lang="scss">
-// @import 'bulma';
-// @import 'bulma-divider';
+@import 'bulma';
+@import 'bulma-divider';
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -30,7 +30,6 @@
 }
 
 footer {
-  margin-top: 40px;
   position: static;
   width: 100vw;
   bottom: 0;
