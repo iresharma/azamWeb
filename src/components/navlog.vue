@@ -15,6 +15,7 @@
                 <span class="navbar-text actions"> {{ username }} 
                     <img :src="photo" @click="drop = !drop" style="height: 5vh; width: 5vh; border-radius: 100%">
                     <div class="dropdown-menu" v-if="drop">
+                        <a @click="addBatch()" class="dropdown-item aim">Join batch</a>
                         <a class="dropdown-item aim" @click="logout">Logout</a>
                     </div>
                 </span>
@@ -61,6 +62,10 @@ export default {
             localStorage.setItem('name', undefined)
             localStorage.setItem('photoUrl', undefined)
             localStorage.setItem('logged', false)
+        },
+        addBatch() {
+            var id = prompt('Batch join token')
+            console.log(id)
         }
     }
 }

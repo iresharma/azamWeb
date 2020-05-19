@@ -10,7 +10,6 @@ import ViewNote from '../views/viewNote'
 import ViewVideo from '../views/viewVideo'
 import conCall from '../views/concall.vue'
 import teacher from '../views/teacherPanel.vue'
-import Upload from '../views/upload.vue'
 
 Vue.use(VueRouter)
 
@@ -59,11 +58,6 @@ Vue.use(VueRouter)
     path: '/panel',
     name: 'Teacher Panel',
     component: teacher
-  },
-  {
-    path:'/upload',
-    name:'Upload',
-    component: Upload
   },
   {
     path: '*',
