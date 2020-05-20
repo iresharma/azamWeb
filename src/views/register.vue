@@ -157,8 +157,9 @@ export default {
                                     this.invalid = true
                                 }
                         })
+                    }
                 }
-            }
+        }
     }
 }
 </script>
