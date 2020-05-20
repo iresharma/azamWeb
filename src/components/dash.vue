@@ -1,5 +1,5 @@
 <template>
-  <div v-if="!editBatch" style="padding: 25px">
+  <div v-if="!editBatch && !addBatch" style="padding: 25px">
     <div class="columns">
       <div class="column is-6">
         <div class="box">
@@ -39,7 +39,7 @@
             <h1 style="font-weight:600; font-size: 3vh; ">Batch management<br>
             <small class="text-muted" style="font-size: 2vh">Add, delete and edit batches</small>
             </h1>
-            <a class="button is-success">Add batch</a>
+            <a class="button is-success" @click="addBatch = true;">Add batch</a>
         </div>
         <table class="table is-fullwidth is-hoverable">
             <tr>
@@ -68,8 +68,11 @@
         </table>
     </div>
   </div>
-  <div v-else style="padding: 25px">
+  <div v-else-if="editBatch && !addBatch" style="padding: 25px">
       <edit :batch="passBatch" />
+  </div>
+  <div v-else-if="!editBatch && addBatch">
+    <add />
   </div>
 </template>
 
@@ -87,6 +90,7 @@ td a {
 </style>
 
 <script>
+import add from './addBatch'
 import sha256 from 'js-sha256'
 import edit from './editBatch.vue'
 
@@ -95,6 +99,7 @@ export default {
     return {
       passBatch: {},
       editBatch: false,
+      addBatch: false,
       teacher: {
         tid: "",
         name: "",
@@ -133,7 +138,8 @@ export default {
     };
   },
   components: {
-    edit
+    edit,
+    add
   },
   beforeMount() {
     this.teacher.photoUrl = localStorage.getItem("photoUrl");

@@ -2,14 +2,28 @@
     <div>
     <div class="register-photo" style="background-image: url(&quot;register.jpg&quot;);height: 85.5vh;">
         <div class="form-container" style="background-color: #56c6c6;">
-            <form method="post">
+            <form>
                 <h2 class="text-center"><strong>Create</strong> an account.</h2>
-                <div class="form-group"><input class="form-control" type="email" name="email" placeholder="Email"></div>
-                <div class="form-group"><input class="form-control" type="password" name="password" placeholder="Password"></div>
-                <div class="form-group"><input class="form-control" type="password" name="password-repeat" placeholder="Password (repeat)"></div>
-                <div class="form-group"><button class="btn btn-primary btn-block" style="background-color: #56C6C6; font-weight: 600" type="submit">Sign Up</button></div><a class="already" href="#">You already have an account? Login here.</a>
-                <div class="login-box-content">
-                    <div class="gp-login box-shadow"><a class="d-flex flex-row align-items-center social-login-link" style="margin-bottom:10px;" @click="Login()"><i class="fa fa-google" style="color:rgb(255,255,255);width:56px;"></i>Signup with Google+</a></div>
+                <div v-if="tokenver">
+                    <div class="form-group"><input class="form-control" v-model="name" type="text" name="name" placeholder="Email"></div>
+                    <div class="form-group"><input class="form-control" v-model="email" type="email" name="email" placeholder="Email"></div>
+                    <div class="form-group"><input class="form-control" v-model="password" type="password" name="password" placeholder="Password"></div>
+                    <div class="form-group"><input class="form-control" v-model="passwordRepeat" type="password" name="password-repeat" placeholder="Password (repeat)"></div><br><span v-if="passerr">Both the password should match</span>
+                    <div class="form-group"><button class="btn btn-primary btn-block" style="background-color: #56C6C6; font-weight: 600" @click="login">Sign Up</button></div><a class="already" @click="$router.push('/login')">You already have an account? Login here.</a>
+                    <div class="login-box-content">
+                        <div class="gp-login box-shadow"><a class="d-flex flex-row align-items-center social-login-link" style="margin-bottom:10px;" @click="Login()"><i class="fa fa-google" style="color:rgb(255,255,255);width:56px;"></i>Signup with Google+</a></div>
+                    </div>
+                </div>
+                <div v-else>
+                    <div class="form-group"><input type="text" @keypress.prevent.enter="checkToken" v-model="token" class="form-control" placeholder="Enter the token"></div>
+                    <span style="color: red" v-if="showerr1">
+                        Invalid token
+                    </span>
+                    <span style="color: red" v-if="showerr2">
+                        Maximum limit used
+                    </span>
+                    <div class="form-group"><a class="btn btn-primary btn-block" style="background-color: #56C6C6; font-weight: 600" @click="checkToken()">Check</a></div><a class="already" @click="$router.push('/login')">You already have an account? Login here.</a>
+                    
                 </div>
             </form>
         </div>
@@ -26,29 +40,126 @@
 <script>
 import firebase from 'firebase'
 import firebaseApp from '../firebaseConfig'
+import sha256 from 'js-sha256'
 
 export default {
+    data() {
+        return {
+            token: '',
+            tokenver: false,
+            showerr1: false,
+            showerr2: false,
+            type: '',
+            batch_id: '',
+            name: '',
+            email: '',
+            password: '',
+            passwordRepeat: '',
+            passerr: false
+        }
+    },
     methods: {
+        checkToken() {
+            firebaseApp.db.collection('token').doc(this.token).get().then((doc) => {
+                if(!doc.exists) {
+                    this.showerr1 = true;
+                }
+                else {
+                    var docv = doc.data()
+                    if(docv.nTotal == docv.nUse){
+                        this.showerr2 = true;
+                    }
+                    else {
+                        var newUse = docv.nUse - 1;
+                        this.tokenver = true;
+                        this.type = docv.type;
+                        this.batch_id = docv.batch
+                        firebaseApp.db.collection('token').doc(this.token).update({nUse: newUse})
+                    }
+                }
+            })
+        },
         Login() {
             var provider = new firebase.auth.GoogleAuthProvider();
             firebaseApp.auth.signInWithPopup(provider)
             .then(snapshot=>{
                 localStorage.setItem('logged', 'true')
                 let user = snapshot.user
-                return firebaseApp.db.doc("users/"+user.uid).get()
+                var pass = prompt("Enter a password")
+                var passHash  = sha256(pass)
+                return firebaseApp.db.collection(this.type).where('email', '==', user.email).get()
                     .then(doc => {
-                        if(!doc.exists){
-                            localStorage.setItem('photoUrl',user.photoURL)
-                            localStorage.setItem('name',user.displayName)
-                            localStorage.setItem('logged', true)
-                            console.log(user.email)
+                        if(doc.empty){
+                            var id = Math.random().toString(34).substring(2,8)
+                            if(this.type == 'student') {
+                                firebaseApp.db.collection(this.type).doc(id).set({
+                                    id: user.uid,
+                                    photoUrl: user.photoURL,
+                                    passHash: passHash,
+                                    name: user.displayName,
+                                    email: user.email,
+                                    quizes: [],
+                                    batch: [this.batch_id]
+                                })
+                            }
+                            else {
+                                firebaseApp.db.collection(this.type).doc(id).set({
+                                    id: user.uid,
+                                    photoUrl: user.photoURL,
+                                    passHash: passHash,
+                                    name: user.displayName,
+                                    email: user.email,
+                                    quizes: [],
+                                    batch: []
+                                })
+                            }
                         }
                         else {
                             this.invalid = true
                         }
                     })
                 })
-            }
+            },
+            login() {
+                if(this.password == this.passwordRepeat) {
+                    this.passerr = true;
+                }
+                else {
+                    var passHash = sha256(this.passwordRepeat)
+                    var id = Math.random().toString(34).substring(2,8)
+                    if(this.type == 'student') {
+                        firebaseApp.db.collection(this.type).where('email', '==', this.email).get().theb((doc) => {
+                            if(doc.empty) {
+                                if(this.type == 'student') {
+                                    firebaseApp.db.collection(this.type).doc(id).set({
+                                            id: id,
+                                            photoUrl: '',
+                                            passHash: passHash,
+                                            name: this.name,
+                                            email: this.email,
+                                            quizes: [],
+                                            batch: [this.batch_id]
+                                        })
+                                    }
+                                    else {
+                                        firebaseApp.db.collection(this.type).doc(id).set({
+                                            id: id,
+                                            photoUrl: '',
+                                            passHash: passHash,
+                                            name: this.name,
+                                            email: this.email,
+                                            quizes: [],
+                                            batch: []
+                                        })
+                                    }
+                                }
+                                else {
+                                    this.invalid = true
+                                }
+                        })
+                    }
+                }
+        }
     }
 }
 </script>
