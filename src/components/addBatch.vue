@@ -84,14 +84,28 @@ export default {
                 nUse: 0,
                 type: this.type
              })
-             firebaseApp.db.collection('teacher').doc(tid).get().then((doc) => {
-                 var docv = doc.data()
-                 docv.batch.append({
-                     batch_id: bid,
-                     name: this.batchName,
-                     students: []
-                 })
-             })
+             if(localStorage.getItem('type') == 'teacher') {
+                 firebaseApp.db.collection('teacher').doc(tid).get().then((doc) => {
+                    var docv = doc.data()
+                    docv.batch.push({
+                        batch_id: bid,
+                        name: this.batchName,
+                        student: [""]
+                    })
+                    firebaseApp.db.collection('teacher').doc(tid).update(docv)
+                })
+             }
+             else {
+                 firebaseApp.db.collection('admin').doc('pTA42ixCblHbbKcYQ2ft').get().then((doc) => {
+                    var docv = doc.data()
+                    docv.batch.push({
+                        batch_id: bid,
+                        name: this.batchName,
+                        student: [""]
+                    })
+                    firebaseApp.db.collection('admin').doc('pTA42ixCblHbbKcYQ2ft').update(docv)
+                })
+             }
          }
     }
 }

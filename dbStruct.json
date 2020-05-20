@@ -6,7 +6,8 @@
         "sid": "",
         "email": "",
         "batch": ["batch_id"],
-        "quizes": ["eid"]
+        "quizes": ["eid"],
+        "teacher": ["tid"]
     },
     "teacher": {
         "tid": "",

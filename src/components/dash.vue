@@ -1,5 +1,5 @@
 <template>
-  <div v-if="!editBatch && !addBatch" style="padding: 25px">
+  <div v-if="!editBatch && !addBatch" style="padding: 2.5%">
     <div class="columns">
       <div class="column is-6">
         <div class="box">
@@ -62,7 +62,7 @@
                 </td>
                 <td>
                     <a @click="editBatch = true; passBatch = Batch" class="button is-small is-rounded is-primary">Edit</a>
-                    <a @click="deleteBatch(Batch.batch_id, ind)" class="button is-small is-rounded is-danger">Delete batch</a>
+                    <a @click="deleteBatch(Batch.name, ind)" class="button is-small is-rounded is-danger">Delete batch</a>
                 </td>
             </tr>
         </table>
@@ -93,6 +93,7 @@ td a {
 import add from './addBatch'
 import sha256 from 'js-sha256'
 import edit from './editBatch.vue'
+import firebaseApp from '../firebaseConfig'
 
 export default {
   data() {
@@ -104,30 +105,10 @@ export default {
         tid: "",
         name: "",
         photoUrl: "",
-        batch: [
-          {
-            batch_id: "",
-            student: [""],
-            name: "Batch 1",
-          },
-          {
-            batch_id: "",
-            student: ["",""],
-            name: "Batch 2",
-          },
-          {
-            batch_id: "",
-            student: ["","",""],
-            name: "Batch 3",
-          },
-          {
-            batch_id: "",
-            student: [""],
-            name: "Batch 4",
-          },
-        ],
         quizes: [""],
         email: "",
+        batch: [],
+        passHash: ''
       },
       contact: {
           subject: '',
@@ -145,6 +126,23 @@ export default {
     this.teacher.photoUrl = localStorage.getItem("photoUrl");
     this.teacher.name = localStorage.getItem("name");
     this.teacher.email = localStorage.getItem("email");
+    if(localStorage.getItem('type') == 'admin') {
+      firebaseApp.db.collection('admin').doc('pTA42ixCblHbbKcYQ2ft').onSnapshot((doc) => {
+        this.teacher.batch = doc.data().batch
+        this.teacher.quizes = doc.data().quiz
+        this.teacher.tid = doc.id
+        this.teacher.passHash = doc.data().passHash
+      })
+    }
+    else {
+      this.teacher.tid = localStorage.getItem('id')
+      firebaseApp.db.collection('teacher').doc(this.teacher.tid).onSnapshot((doc) => {
+        this.teacher.batch = doc.data().batch
+        this.teacher.quizes = doc.data().quiz
+        this.teacher.tid = doc.id
+        this.teacher.passHash = doc.data().passHash
+      })
+    }
   },
   methods: {
     countStudent() {
@@ -154,12 +152,17 @@ export default {
       });
       return stu;
     },
-    deleteBatch(id, ind) {
-        var pass = prompt("Enter password" + id)
+    deleteBatch(name, ind) {
+        var pass = prompt("Enter password to delete " + name + ' batch')
         var hash = sha256(pass).toString()
-        var hello = '2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824'
-        if(hash === hello) {
-            this.teacher.batch.splice(ind, 1)
+        if(hash == this.teacher.passHash) {
+          this.teacher.batch.splice(ind, 1)
+          if(localStorage.getItem('type') == 'admin') {
+            firebaseApp.db.collection('admin').doc('pTA42ixCblHbbKcYQ2ft').update(this.teacher)
+          }
+          else {
+            firebaseApp.db.collection('teacher').doc(this.teacher.tid).update(this.teacher)
+          }
         }
     }
   },
