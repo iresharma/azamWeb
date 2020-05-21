@@ -13,7 +13,7 @@
                     <li v-if="type == 'teacher' || type == 'admin'" class="nav-item" role="presentation"><a class="aim nav-link" @click="$router.push('/panel')">Teacher Panel</a></li>
                 </ul>
                 <span class="navbar-text actions"> {{ username }} 
-                    <img :src="photo == '' || photo == undefined ? emer : photo" @click="drop = !drop" style="height: 5vh; width: 5vh; border-radius: 100%">
+                    <img :src="photo == '' || photo == 'undefined' || photo === undefined ? emer : photo" @click="drop = !drop" style="height: 5vh; width: 5vh; border-radius: 100%">
                     <div class="dropdown-menu" v-if="drop">
                         <a @click="addBatch()" class="dropdown-item aim">Join batch</a>
                         <a class="dropdown-item aim" @click="logout">Logout</a>
@@ -62,6 +62,7 @@ export default {
             localStorage.setItem('name', undefined)
             localStorage.setItem('photoUrl', undefined)
             localStorage.setItem('logged', false)
+            this.$router.go('/')
         },
         addBatch() {
             var id = prompt('Batch join token')
