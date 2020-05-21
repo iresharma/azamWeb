@@ -50,7 +50,15 @@ export default {
             logged: '',
             user: '',
             room: '',
-            ended: false
+            ended: false,
+            tolBarBtn: [
+                'microphone', 'camera', 'closedcaptions', 'fullscreen',
+                'hangup', 'chat',
+                'raisehand',
+                'videoquality', 'filmstrip',
+                'tileview',
+                'e2ee',
+            ],
         }
     },
     beforeMount() {
@@ -70,8 +78,13 @@ export default {
             height: document.documentElement.clientHeight - 100,
             parentNode: this.$el.querySelector('#jitsi-container'),
             interfaceConfigOverwrite: {
-            filmStripOnly: false,
-            SHOW_JITSI_WATERMARK: false,
+                filmStripOnly: false,
+                SHOW_JITSI_WATERMARK: false,
+                TOOLBAR_BUTTONS: this.tolBarBtn,
+                SHOW_JITSI_WATERMARK: false,
+                JITSI_WATERMARK_LINK: '',
+                SHOW_BRAND_WATERMARK: true,
+                BRAND_WATERMARK_LINK: 'https://firebasestorage.googleapis.com/v0/b/azamwebnotes.appspot.com/o/Screenshot%202020-05-18%20at%203.20.07%20PM.png?alt=media&token=8fa57300-2046-4602-b222-7a84bd5e4e3c',
             },
             configOverwrite: {
                 disableSimulcast: false,

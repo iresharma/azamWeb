@@ -64,8 +64,8 @@
                             </label>
                             </div>
                             <br>
-                            <input class="input" v-model="video.title" placeholder="Pdf name" type="text"><br><br>
-                            <input class="input" v-model="video.subtitle" placeholder="Pdf description" type="text">
+                            <input class="input" v-model="video.title" placeholder="Video name" type="text"><br><br>
+                            <input class="input" v-model="video.subtitle" placeholder="Vedio description" type="text">
                             <div style="margin: 10px;">
                                 <div style="display: flex; justify-content: space-between">
                                     <big class="muted-text">Progress: {{uploadValuevideo.toFixed()+"%"}}</big>

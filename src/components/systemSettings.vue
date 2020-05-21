@@ -14,7 +14,7 @@
                                     <br />
                                     <table>
                                         <tr>
-                                            <td><b>Teachers</b>: {{ teachers.length }}</td>
+                                            <td><b>Teachers</b>: {{ total }}</td>
                                             <td><b>Students</b>: {{ totalStudent }}</td>
                                         </tr>
                                         <tr>
@@ -70,7 +70,14 @@
                         <small class="text-muted" style="font-size: 2vh">Add or remove teachers here</small>
                     </h1>
                 </div>
-                <a class="button is-small is-success">Add Teacher</a>
+                <div style="display: flex; flex-direction: row; align-items: center">
+                    <a class="button is-small is-success" v-if="!show" @click="add">Add Teacher</a>
+                    <div style="margin: 5px;" v-if="show" class="tokenn notification is-primary is-light;">
+                        <button class="delete" @click="show = false"></button>
+                        Teacher register token <br>
+                        <strong>{{ token }}</strong>
+                    </div>
+                </div>
             </div>
             <table class="table is-fullwidth is-hoverable">
             <tr>
@@ -98,6 +105,15 @@
                 </td>
             </tr>
         </table>
+        <nav class="pagination is-rounded">
+            <a v-if="page == 1" class="button is-rounded is-outlined pagination-previous is-danger">Previous</a>
+            <a v-else class="pagination-previous is-success button is-rounded is-outlined" @click="loadprev">Previous</a>
+            <ul class="pagination-list">
+                <li class="pagination-link"><strong>{{ page }}</strong></li>
+            </ul>
+            <a v-if="page == Number(total/10)" class="pagination-next is-outlined button is-rounded is-danger">Next Page</a>
+            <a v-else class="pagination-next is-success button is-rounded is-outlined" @click="loadNext">Next Page</a>
+        </nav>
         </div>
     </div>
 </template>
@@ -118,6 +134,12 @@ export default {
             admin: {},
             classes: 10,
             totalStudent: 0,
+            first: '',
+            last: '',
+            page: 1,
+            total: 1,
+            token: '',
+            show: false
         }
     },
     beforeMount() {
@@ -125,21 +147,60 @@ export default {
             this.admin = response.data()
             console.log(this.admin)
         })
-        firebaseApp.db.collection('teacher').onSnapshot((snapshot) => {
+        firebaseApp.db.collection('count').doc('ZvZXwyhhYes2VSMCyYTD').onSnapshot((doc) => {
+            this.total = doc.data().teacher
+        })
+        firebaseApp.db.collection('teacher').orderBy('tid').limit(10).onSnapshot((doc) => {
             this.teachers = []
-            snapshot.docs.forEach((doc) => {
+            doc.forEach((te) => {
                 var teacher = {
-                    id: doc.id,
-                    data: doc.data()
+                    id: te.id,
+                    data: te.data()
                 }
                 this.teachers.push(teacher)
             })
+            this.last = this.teachers[9].id
+            this.first = this.teachers[0].id
         })
         this.admin.photoUrl = localStorage.getItem('photoUrl')
         this.admin.name = localStorage.getItem('name')
         
     },
     methods: {
+        loadNext() {
+            if(this.total/10 !== this.page) {
+                firebaseApp.db.collection('teacher').orderBy('tid').startAfter(this.last).limit(10).onSnapshot((doc) => {
+                    this.teachers = []
+                    doc.forEach((te) => {
+                        var teacher = {
+                            id: te.id,
+                            data: te.data()
+                        }
+                        this.teachers.push(teacher)
+                    })
+                    this.page += 1
+
+                    this.last = this.teachers[9].id
+                    this.first = this.teachers[0].id
+                })
+            }
+        },
+        loadprev() {
+            firebaseApp.db.collection('teacher').orderBy('tid').endBefore(this.first).limit(10).onSnapshot((doc) => {
+                this.teachers = []
+                doc.forEach((te) => {
+                    var teacher = {
+                        id: te.id,
+                        data: te.data()
+                    }
+                    this.teachers.push(teacher)
+                })
+                this.page -= 1
+
+                this.last = this.teachers[9].id
+                this.first = this.teachers[0].id
+            })
+        },
         nStudent(batches) {
             var students = 0
             batches.forEach((batch) => {
@@ -148,11 +209,11 @@ export default {
             return students
         },
         countStudent() {
-        var stu = 0;
-        this.admin.batch.forEach((batch) => {
-            stu = stu + batch.student.length;
-        });
-        return stu;
+            var stu = 0;
+            this.admin.batch.forEach((batch) => {
+                stu = stu + batch.student.length;
+            });
+            return stu;
         },
         removeTeacher(id) {
             var pass = prompt("Enter password");
@@ -166,6 +227,23 @@ export default {
                 else {
                     this.removeTeacher(id)
                 }
+            })
+            firebaseApp.db.collection('count').doc('ZvZXwyhhYes2VSMCyYTD').update({
+                teacher: this.total - 1
+            })
+        },
+        add() {
+            var result = '';
+            var characters  = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+            var charactersLength = characters.length;
+            for ( var i = 0; i < 6; i++ ) {
+                result += characters.charAt(Math.floor(Math.random() * charactersLength));
+            }
+            this.token = result
+            this.show = true
+            firebaseApp.db.collection('token').doc(this.token).set({
+                token: this.token,
+                type: 'teacher'
             })
         }
     }

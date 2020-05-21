@@ -6,9 +6,9 @@
         <table class="table is-fullwidth is-hoverable">
             <tr>
                 <th>Name</th>
-                <th>{{ month[0] }}</th>
-                <th>{{ month[0] }}</th>
-                <th>{{ month[0] }}</th>
+                <th>{{ month[mon1] }}</th>
+                <th>{{ month[mon] }}</th>
+                <th>{{ month[mon2] }}</th>
             </tr>
         </table>
     </div>
@@ -30,7 +30,8 @@ export default {
     },
     beforeMount() {
         this.mon = new Date().getMonth()
-
+        this.mon1 = this.mon - 1 == -1 ? 11 : this.mon - 1
+        this.mon2 = this.mon + 1 == 12 ? 0 : this.mon + 1
     }
 }
 </script>
