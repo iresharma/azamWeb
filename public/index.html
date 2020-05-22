@@ -28,16 +28,14 @@
     
     <!-- built files will be auto injected -->
     <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
-    <script>
-      new Vue({
-        el: '#app',
-        vuetify: new Vuetify(),
-      })
-    </script>
     <script src="js/wow.min.js"></script>
     <script>
     new WOW().init();
     </script>
+    <style>
+      body::-webkit-scrollbar {
+        display: none;
+      }
+    </style>
   </body>
 </html>

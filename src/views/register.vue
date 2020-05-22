@@ -107,6 +107,13 @@ export default {
                                 localStorage.setItem('id', id)
                                 localStorage.setItem('photoUrl', user.photoUrl)
                                 localStorage.setItem('name', user.displayName)
+                                var count;
+                                firebaseApp.db.collection('count').doc('ZvZXwyhhYes2VSMCyYTD').get().then((doc) => {
+                                    count = doc.data().student
+                                })
+                                firebaseApp.db.collection('count').doc('ZvZXwyhhYes2VSMCyYTD').update({
+                                    teacher: count + 1
+                                })
                             }
                             else {
                                 firebaseApp.db.collection(this.type).doc(id).set({
@@ -123,6 +130,12 @@ export default {
                                 localStorage.setItem('id', id)
                                 localStorage.setItem('photoUrl', user.photoUrl)
                                 localStorage.setItem('name', user.displayName)
+                                firebaseApp.db.collection('count').doc('ZvZXwyhhYes2VSMCyYTD').get().then((doc) => {
+                                    count = doc.data().teacher
+                                })
+                                firebaseApp.db.collection('count').doc('ZvZXwyhhYes2VSMCyYTD').update({
+                                    teacher: count + 1
+                                })
                             }
                             this.$router.push('/')
                         }
@@ -156,6 +169,13 @@ export default {
                                         localStorage.setItem('id', id)
                                         
                                         localStorage.setItem('name', this.name)
+                                        var count;
+                                        firebaseApp.db.collection('count').doc('ZvZXwyhhYes2VSMCyYTD').get().then((doc) => {
+                                            count = doc.data().student
+                                        })
+                                        firebaseApp.db.collection('count').doc('ZvZXwyhhYes2VSMCyYTD').update({
+                                            teacher: count + 1
+                                        })
                                     }
                                     else {
                                         firebaseApp.db.collection(this.type).doc(id).set({
@@ -172,6 +192,12 @@ export default {
                                         localStorage.setItem('id', id)
                                         
                                         localStorage.setItem('name', this.name)
+                                        firebaseApp.db.collection('count').doc('ZvZXwyhhYes2VSMCyYTD').get().then((doc) => {
+                                            count = doc.data().teacher
+                                        })
+                                        firebaseApp.db.collection('count').doc('ZvZXwyhhYes2VSMCyYTD').update({
+                                            teacher: count + 1
+                                })
                                     }
                                     this.$router.push('/')
                                 }
