@@ -1,4 +1,5 @@
 <template>
+<!-- fixing git -->
     <div class="box" style="margin: 25px; text-align: left; height: 100vh">
         <svg @click="$router.go()" class="bi bi-arrow-left aim" width="3em" height="3em" viewBox="0 0 16 16" fill="red" xmlns="http://www.w3.org/2000/svg">
             <path fill-rule="evenodd" d="M5.854 4.646a.5.5 0 010 .708L3.207 8l2.647 2.646a.5.5 0 01-.708.708l-3-3a.5.5 0 010-.708l3-3a.5.5 0 01.708 0z" clip-rule="evenodd"/>
