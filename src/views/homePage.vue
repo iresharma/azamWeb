@@ -19,7 +19,7 @@
             <div class="columns">
                 <img src="../assets/teach.svg" width="80%" alt="">
             </div>
-            <div style="background-image: url(./svg/plant-4.svg);background-repeat: no-repeat;background-size: 40%;background-position: bottom right;display: flex;flex-direction: column;justify-content: center;" class="column">
+            <div id="fuck1" class="column">
             <h1 id="tittle-c">Contact Me</h1>
             <form action="" method="POST" id="tex-fo">
                 <div class="form-group"><input name="name" class="form-control" type="text" style="font-family: Barlow, sans-serif;" placeholder="Name"></div>
@@ -160,7 +160,15 @@
   outline: 0;
   box-shadow: none;
 }
-
+#fuck1 {
+  background-image: url("../assets/svg/plant-4.svg");
+  background-repeat: no-repeat;
+  background-size: 40%;
+  background-position: bottom right;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
 
 </style>
 

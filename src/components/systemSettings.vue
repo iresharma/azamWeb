@@ -5,7 +5,7 @@
                 <div class="box">
                     <article class="media">
                         <div class="media-left">
-                            <div style="width: 180px; height: 180px; background-image: url(&quot;svg/system.svg&quot;); background-size: contain; background-position: center"></div>
+                            <div id="fuck1"></div>
                         </div>
                         <div class="media-content">
                             <div class="content">
@@ -120,7 +120,13 @@
 
 
 <style scoped>
-
+#fuck1 {
+    width: 180px; 
+    height: 180px; 
+    background-image: url("../assets/svg/system.svg"); 
+    background-size: contain; 
+    background-position: center
+}
 </style>
 
 <script>

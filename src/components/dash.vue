@@ -31,7 +31,7 @@
             </div>
         </div>
       </div>
-      <div class="column is-6" style="background-image: url(&quot;./svg/dash.svg&quot;); background-size: 80%; background-repeat: no-repeat; background-position: center">
+      <div class="column is-6" id="whocares" style="">
       </div>
     </div>
     <div class="box is-12">
@@ -86,6 +86,12 @@
 }
 td a {
     margin: 4px;
+}
+#whocares {
+  background-image: url("../assets/svg/dash.svg"); 
+  background-size: 80%; 
+  background-repeat: no-repeat; 
+  background-position: center
 }
 </style>
 

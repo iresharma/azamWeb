@@ -5,7 +5,7 @@
                 <div class="column is-9 is-offset-one-quarter">
                     <h1 class="is-size-2">Upload Note</h1>
                     <div class="is-divider"></div>
-                    <div style="background:url(./svg/notes.svg);background-size:90%;background-repeat:no-repeat;height:320px;background-position:center"></div><br><br>
+                    <div id="fuck1"></div><br><br>
                     <div>
                         <div class="file has-name">
                             <label class="file-label">
@@ -48,7 +48,7 @@
                 <div class="column is-9">
                     <h1 class="is-size-2">Upload Video</h1>
                     <div class="is-divider"></div>
-                    <div style="background:url(./svg/video.svg);background-size:contain;background-repeat:no-repeat;height:320px;background-position:center"></div><br><br>
+                    <div id="fuck2"></div><br><br>
                     <div>
                         <div class="file has-name">
                             <label class="file-label">
@@ -93,6 +93,23 @@
 
     </div>
 </template>
+
+<style scoped>
+#fuck1 {
+    background:url("../assets/svg/notes.svg");
+    background-size:90%;
+    background-repeat:no-repeat;
+    height:320px;
+    background-position:center
+}
+#fuck2 {
+    background:url("../assets/svg/video.svg");
+    background-size:contain;
+    background-repeat:no-repeat;
+    height:320px;
+    background-position:center
+}
+</style>
 
 <script>
 // import firebase from 'firebase'

@@ -1,12 +1,19 @@
 <template>
     <div>
         <div
-        style="background-image: url(&quot;./svg/404svg.svg&quot;);background-repeat: no-repeat;background-position: center;backgroud-size: 50%;width: 100vw; height: 90vh"></div>
+        id="fuck"></div>
     </div>
 </template>
 
 <style scoped>
-
+#fuck {
+    background-image: url("../assets/svg/404svg.svg");
+    background-repeat: no-repeat;
+    background-position: center;
+    backgroud-size: 50%;
+    width: 100vw; 
+    height: 90vh
+}
 </style>
 
 <script>

@@ -4,11 +4,11 @@
     <div v-if="!ready" class="columns">
       <div
         class="column is-6"
-        style='background-image: url("./svg/teacherClass.svg"); background-size: contain'
+        id="fuck1"
       ></div>
       <div
         class="column is-6 is-hcentered"
-        style='justify-content: center; align-items: center;background-image: url("./svg/plant-3.svg"); background-position: bottom right'
+        id="fuck2"
       >
         <div style="margin-top: 10px; width: 100%; padding: 40px">
           <div class="login-box-header">
@@ -71,7 +71,7 @@
       </div>
     </div>
     <div v-if="ended" class="columns" style="height: 50vh">
-        <div class="column is-6" style="background-image: url(&quot;./svg/end.svg&quot;); background-size: contain"></div>
+        <div class="column is-6" id="fuck3"></div>
         <div class="column is-6" style="display: flex; justify-content: center; align-items: center">
             <strong>Thank you for using out platform</strong>
         </div>
@@ -85,6 +85,20 @@ select:hover {
 }
 input:hover {
     border-color: #ffdd57
+}
+#fuck1 {
+  background-image: url("../assets/svg/teacherClass.svg"); 
+  background-size: contain
+}
+#fuck2 {
+  justify-content: center; 
+  align-items: center;
+  background-image: url("../assets/svg/plant-3.svg"); 
+  background-position: bottom right
+}
+#fuck3 {
+  background-image: url("../assets/svg/end.svg"); 
+  background-size: contain
 }
 </style>
 

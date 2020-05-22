@@ -1,10 +1,10 @@
 <template>
-    <div style="overflow-x: hidden">
+    <div>
         <div id="jitsi-container"></div>
         <div>
             <div v-if="!ready" class="columns is-vcentered">
-                <div class="column is-6" style="height: 70vh; background-image: url(&quot;./svg/callJoin.svg&quot;); background-size: contain"></div>
-                <div class="column is-5 is-hcentered" style="justify-content: center; align-items: center;background-image: url(&quot;./svg/plant-3.svg&quot;); background-position: bottom right">
+                <div class="column is-6" id="fuck3"></div>
+                <div class="column is-5 is-hcentered" id="fuck2">
                     <div style="margin-top: 50px; width: 100%; padding: 40px">
                         <div class="login-box-header">
                             <h4 style="color:rgb(139,139,139);margin-bottom:0px;font-weight:800;font-size:37px;">Join Class</h4>
@@ -28,7 +28,7 @@
                         Thank you for joining
                     </h1>
                 </div>
-                <div class="column whyy" style="height: 70vh;backgroud-image: url(&quot;./svg/end.svg&quot;); background-size: contain;"></div>
+                <div class="column whyy" id="fuck1"></div>
             </div>
         </div>
     </div>
@@ -37,6 +37,22 @@
 <style scoped>
 #jitsi-container {
     z-index: 10;
+}
+#fuck1 {
+    height: 70vh;
+    backgroud-image: url("../assets/svg/end.svg"); 
+    background-size: contain;
+}
+#fuck2 {
+    justify-content: center; 
+    align-items: center;
+    background-image: url("../assets/svg/plant-3.svg"); 
+    background-position: bottom right;
+}
+#fuck3 {
+    height: 70vh; 
+    background-image: url("../assets/svg/callJoin.svg"); 
+    background-size: contain
 }
 </style>
 

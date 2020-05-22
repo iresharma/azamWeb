@@ -25,7 +25,7 @@
                     <strong>{{ token }}</strong>
                 </div>
             </div>
-            <div class="column" style="background-image: url(&quot;./svg/batch.svg&quot;); background-size: contain; background-position: center center;">
+            <div class="column" id="svgBack">
 
             </div>
         </div>
@@ -38,6 +38,11 @@
 }
 .aim {
     cursor: pointer;
+}
+#svgBack {
+    background-image: url("../assets/svg/batch.svg");
+    background-size: contain; 
+    background-position: center center;
 }
 </style>
 

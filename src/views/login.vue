@@ -69,7 +69,9 @@ export default {
             var hash = sha256(this.password)
             firebaseApp.db.collection('admin').doc('pTA42ixCblHbbKcYQ2ft').get().then((doc) => {
                 if(this.email == doc.data().email){
-                    if(hash == doc.data().passHas) {
+                    console.log('hljs-deletion')
+                    if(hash == doc.data().passHash) {
+                        console.log('kqwiok')
                         localStorage.setItem('name', doc.data().name)
                         localStorage.setItem('type', 'admin'),
                         localStorage.setItem('logged', true)
