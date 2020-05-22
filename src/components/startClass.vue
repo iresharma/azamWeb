@@ -164,6 +164,12 @@ export default {
           _this.ended = true;
           firebaseApp.db.collection('liveClass').doc(this.id).update({active: false})
         });
+        firebaseApp.db.collection('count').doc().get().then((count) => {
+            var counter = count.data().liveClass
+            firebaseApp.db.collection('count').doc().update({
+                liveClass: counter
+            })
+        })
       } catch (error) {
         console.error("Failed to load Jitsi API", error);
       }

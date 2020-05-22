@@ -208,13 +208,6 @@ export default {
             })
             return students
         },
-        countStudent() {
-            var stu = 0;
-            this.admin.batch.forEach((batch) => {
-                stu = stu + batch.student.length;
-            });
-            return stu;
-        },
         removeTeacher(id) {
             var pass = prompt("Enter password");
             var passHash = sha256(pass)
@@ -228,8 +221,10 @@ export default {
                     this.removeTeacher(id)
                 }
             })
-            firebaseApp.db.collection('count').doc('ZvZXwyhhYes2VSMCyYTD').update({
-                teacher: this.total - 1
+            
+            firebaseApp.db.collection('count').doc('ZvZXwyhhYes2VSMCyYTD').get().then((count) => {
+                var counter = count.data().techer - 1
+                firebaseApp.db.collection('count').doc('ZvZXwyhhYes2VSMCyYTD').update({teacher: counter})
             })
         },
         add() {

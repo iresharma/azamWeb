@@ -9,7 +9,7 @@
                     <li class="nav-item" role="presentation"><router-link class="aim nav-link" :to="'/'">Home</router-link></li>
                     <li class="nav-item" role="presentation"><router-link class="aim nav-link" :to="'/notes'">Notes</router-link></li>
                     <li class="nav-item" role="presentation"><router-link class="aim nav-link" :to="'/videos'">Videos</router-link></li>
-                    <li class="nav-item" role="presentation"><router-link class="aim nav-link" :to="'/class'">Live Class</router-link></li>
+                    <li class="nav-item" v-if="type == 'student'" role="presentation"><router-link class="aim nav-link" :to="'/class'">Live Class</router-link></li>
                     <li v-if="type == 'teacher' || type == 'admin'" class="nav-item" role="presentation"><a class="aim nav-link" @click="$router.push('/panel')">Teacher Panel</a></li>
                 </ul>
                 <span class="navbar-text actions"> {{ username }} 

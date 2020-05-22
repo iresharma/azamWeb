@@ -76,7 +76,11 @@ export default {
          },
          write() {
              var bid = Math.random().toString(34).substring(2,8)
-             var tid = localStorage.getItem('tid')
+             var tid = localStorage.getItem('id')
+             firebaseApp.db.collection('count').doc('ZvZXwyhhYes2VSMCyYTD').get().then((count) => {
+                 var counter = count.data().batch + 1
+                 firebaseApp.db.collection('count').doc('ZvZXwyhhYes2VSMCyYTD').update({batch: counter})
+             })
              firebaseApp.db.collection('token').doc(this.token).set({
                 token: this.token,
                 batch: bid,

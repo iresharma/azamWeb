@@ -9,7 +9,7 @@
                 <input type="password" class="password-input form-control" style="margin-top:10px;" required="true" placeholder="Password" v-model="password" minlength="6"></div>
             <div class="submit-row" style="margin-bottom:8px;padding-top:0px;"><button class="button is-rounded is-large" style="background-color: #ffdd57;color: black" id="submit-id-submit" @click="submiter">Login</button>
             <br>
-            <span style="color: red" v-if="invalid">user doesn't exist</span>
+            <span style="color: red" v-if="invalid">user doesn't exist</span><span style="color: red" v-if="passerr">incorrect password</span>
                 <div class="d-flex justify-content-between"><a id="forgot-password-link" href="#">Forgot Password?</a></div>
             </div>
             <div class="d-flex flex-row align-items-center login-box-seperator-container">
@@ -60,46 +60,60 @@ export default {
         return {
             email: '',
             password: '',
-            invalid: false
+            invalid: false,
+            passerr: false
         }
     },
     methods: {
         submiter() {
             var hash = sha256(this.password)
             firebaseApp.db.collection('admin').doc('pTA42ixCblHbbKcYQ2ft').get().then((doc) => {
-                if(hash == doc.data().passHash){
-                    localStorage.setItem('name', doc.data().name)
-                    localStorage.setItem('type', 'admin'),
-                    localStorage.setItem('logged', true)
-                    localStorage.setItem('id', doc.id)
-                    localStorage.setItem('photoUrl', doc.data().photoUrl)
-                    this.$router.push('/', () => {this.$router.go()})
+                if(this.email == doc.data().email){
+                    if(hash == doc.data().passHas) {
+                        localStorage.setItem('name', doc.data().name)
+                        localStorage.setItem('type', 'admin'),
+                        localStorage.setItem('logged', true)
+                        localStorage.setItem('id', doc.id)
+                        localStorage.setItem('photoUrl', doc.data().photoUrl)
+                        this.$router.push('/', () => {this.$router.go()})
+                    }
                 }
                 else {
                     firebaseApp.db.collection('student').where('email', '==', this.email).get()
                     .then(doce => {
-                        if(doce.exists){
-                            if(hash == doce.data().passHash) {
-                                localStorage.setItem('name', doce.data().name)
-                                localStorage.setItem('type', 'student'),
-                                localStorage.setItem('logged', true)
-                                localStorage.setItem('id', doce.id)
-                                localStorage.setItem('photoUrl', doce.data().photoUrl)
-                                this.$router.push('/', () => {this.$router.go()})
-                            }
+                        if(!doce.empty){
+                            console.log('hello')
+                            doce.forEach((student) => {
+                                if(hash == student.data().passHash) {
+                                    localStorage.setItem('name', student.data().name)
+                                    localStorage.setItem('type', 'student'),
+                                    localStorage.setItem('logged', true)
+                                    localStorage.setItem('id', student.id)
+                                    localStorage.setItem('photoUrl', student.data().photoUrl)
+                                    this.$router.push('/', () => {this.$router.go()})
+                                }
+                                else {
+                                    this.passerr = true
+                                }
+                            })
                         }
                         else {
                             firebaseApp.db.collection('teacher').where('email', '==', this.email).get()
                             .then((docs) => {
-                                if(docs.exists) {
-                                    if(hash == doc.data().passHash) {
-                                        localStorage.setItem('name', docs.data().name)
-                                        localStorage.setItem('type', 'teacher'),
-                                        localStorage.setItem('logged', true)
-                                        localStorage.setItem('id', docs.id)
-                                        localStorage.setItem('photoUrl', docs.data().photoUrl)
-                                        this.$router.push('/', () => {this.$router.go()})
-                                    }
+                                if(!docs.empty) {
+                                    docs.forEach((teacher) => {
+                                        if(hash == teacher.data().passHash) {
+                                            localStorage.setItem('name', teacher.data().name)
+                                            localStorage.setItem('type', 'student'),
+                                            localStorage.setItem('logged', true)
+                                            localStorage.setItem('id', teacher.id)
+                                            localStorage.setItem('photoUrl', teacher.data().photoUrl)
+                                            this.$router.push('/', () => {this.$router.go()})
+                                        }
+                                        else {
+                                            this.passerr = true
+                                        }
+                                    })
                                 }
                                 else {
                                     this.invalid = true

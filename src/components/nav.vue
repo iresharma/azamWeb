@@ -7,9 +7,6 @@
                 id="navcol-1">
                 <ul class="nav navbar-nav mr-auto">
                     <li class="nav-item" role="presentation"><a class="aim nav-link" @click="$router.push('/')">Home</a></li>
-                    <li class="nav-item" role="presentation"><a class="aim nav-link" @click="$router.push('/notes')">Notes</a></li>
-                    <li class="nav-item" role="presentation"><a class="aim nav-link" @click="$router.push('/videos')">Videos</a></li>
-                    <li class="nav-item" role="presentation"><a class="aim nav-link" @click="$router.push('/class')">Live Class</a></li>
                 </ul><span class="navbar-text navd actions"> <span class="aim login" @click="$router.push('/login')">Log In</span><a class="aim button is-medium is-rounded is-warning " role="button" @click="$router.push('/register')">Sign Up</a></span></div>
         </div>
     </nav>
