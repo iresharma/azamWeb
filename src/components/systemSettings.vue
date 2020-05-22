@@ -50,10 +50,10 @@
                                         <td><b>Batches</b>: {{ admin.batch.length }}</td>
                                     </tr>
                                     <tr>
-                                        <td><b>Students</b>: {{ countStudent() }}</td>
+                                        <td><b>Students</b>: {{ nStudent(admin.batch) }}</td>
                                     </tr>
                                     <tr>
-                                        <td><b>Quizzes</b>: {{ admin.quiz.length }}</td>
+                                        <td><b>Quizzes</b>: {{ admin.quizes.length }}</td>
                                     </tr>
                                 </table>
                                 </p>

@@ -62,7 +62,7 @@ export default {
             localStorage.setItem('name', undefined)
             localStorage.setItem('photoUrl', undefined)
             localStorage.setItem('logged', false)
-            this.$router.go('/')
+            this.$router.push('/', this.$router.go())
         },
         addBatch() {
             var id = prompt('Batch join token')

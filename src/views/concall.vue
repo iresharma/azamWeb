@@ -1,5 +1,5 @@
 <template>
-    <div style="overflow-x: hidedn">
+    <div style="overflow-x: hidden">
         <div id="jitsi-container"></div>
         <div>
             <div v-if="!ready" class="columns is-vcentered">
@@ -11,7 +11,10 @@
                         </div>
                         <div class="email-login" style="background-color: transparent;">
                             <input type="text" class="email-imput form-control" style="margin-top:10px; background: white;" required="true" disabled :value="user" minlength="6">
-                            <input type="text" class="password-input form-control" style="margin-top:10px;" required="true" placeholder="Room name" v-model="room" @keypress.prevent.enter="ready = true;openRoom()" minlength="6"></div>
+                            {{ classname }}
+                            {{ classinfo }}
+                            {{ activeBatch }}
+                        </div>
                         <div class="submit-row" style="margin-bottom:8px; margin-top: 20px; padding-top:0px;"><button class="button is-rounded is-large" style="background-color: #ffdd57;color: black" @click="ready = true;openRoom()" id="submit-id-submit" >Join</button>
                         <br>
                         </div>
@@ -41,7 +44,7 @@
 
 
 <script>
-
+import firebaseApp from '../firebaseConfig'
 export default {
     data()
 	{
@@ -53,17 +56,42 @@ export default {
             ended: false,
             tolBarBtn: [
                 'microphone', 'camera', 'closedcaptions', 'fullscreen',
-                'chat',
+                'chat', 'hangup',
                 'raisehand',
                 'videoquality', 'filmstrip',
                 'tileview',
                 'e2ee',
             ],
+            batchs: [],
+            activeBatch: '',
+            classname: '',
+            classinfo: '',
+            state: false
         }
     },
     beforeMount() {
         this.logged = localStorage.getItem('logged')
         this.user = localStorage.getItem('name')
+        var id = localStorage.getItem('id')
+        firebaseApp.db.collection('student').doc(id).get().then((doc) => {
+            this.batches = doc.data().batch
+            this.batches.forEach((batch) => {
+                firebaseApp.db.collection('liveClass').where('batch', '==', batch).where('active', '==', true).onSnapshot((classes) => {
+                    if(!classes.empty) {
+                        classes.forEach((classac) => {
+                            this.activeBatch = classac.data().batch
+                            this.classname = classac.data().className
+                            this.classinfo = classac.data().classInfo
+                            this.room = classac.data().id
+                            if(!classac.data().active && this.ready) {
+                                this.$el.querySelector('#jitsi-container').style.display = 'none';
+                                this.ended = true
+                            }
+                        })
+                    }
+                })
+            })
+        })
     },
     methods:{
    startConference() {

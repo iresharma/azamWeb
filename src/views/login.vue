@@ -131,30 +131,35 @@ export default {
                 let user = snapshot.user
                 firebaseApp.db.collection('student').where('email', '==', user.email).get()
                     .then(doc => {
-                        if(doc.exists){
-                            localStorage.setItem('type', 'student'),
-                            localStorage.setItem('name', doc.data().name)
-                            localStorage.setItem('logged', true)
-                            localStorage.setItem('id', doc.id)
-                            localStorage.setItem('photoUrl', user.photoUrl)
-                            this.$router.push('/', () => {this.$router.go()})
+                        if(!doc.empty) {
+                            doc.forEach((doce) => {
+                                localStorage.setItem('type', 'student'),
+                                localStorage.setItem('name', doce.data().name)
+                                localStorage.setItem('logged', true)
+                                localStorage.setItem('id', doce.id)
+                                localStorage.setItem('photoUrl', user.photoUrl)
+                                this.$router.push('/', () => {this.$router.go()})
+                            })
                         }
                         else {
                             firebaseApp.db.collection('teacher').where('email', '==', user.email).get()
                             .then((docs) => {
-                                if(docs.exists) {
-                                    localStorage.setItem('name', docs.data().name)
-                                    localStorage.setItem('type', 'teacher'),
-                                    localStorage.setItem('logged', true)
-                                    localStorage.setItem('id', docs.id)
-                                    localStorage.setItem('photoUrl', user.photoUrl)
-                                    this.$router.push('/', () => {this.$router.go()})
+                                if(!docs.empty) {
+                                    docs.forEach((doce) => {
+                                        localStorage.setItem('name', doce.data().name)
+                                        localStorage.setItem('type', 'teacher'),
+                                        localStorage.setItem('logged', true)
+                                        localStorage.setItem('id', doce.id)
+                                        localStorage.setItem('photoUrl', user.photoUrl)
+                                        this.$router.push('/', () => {this.$router.go()})
+                                    })
                                 }
                                 else {
                                     this.invalid = true
                                 }
                             })
                         }
+                        
                     })
                 })
             }
