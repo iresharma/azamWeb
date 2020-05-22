@@ -72,6 +72,7 @@ export default {
                     localStorage.setItem('type', 'admin'),
                     localStorage.setItem('logged', true)
                     localStorage.setItem('id', doc.id)
+                    localStorage.setItem('photoUrl', doc.data().photoUrl)
                     this.$router.push('/', () => {this.$router.go()})
                 }
                 else {
@@ -83,6 +84,7 @@ export default {
                                 localStorage.setItem('type', 'student'),
                                 localStorage.setItem('logged', true)
                                 localStorage.setItem('id', doce.id)
+                                localStorage.setItem('photoUrl', doce.data().photoUrl)
                                 this.$router.push('/', () => {this.$router.go()})
                             }
                         }
@@ -95,6 +97,7 @@ export default {
                                         localStorage.setItem('type', 'teacher'),
                                         localStorage.setItem('logged', true)
                                         localStorage.setItem('id', docs.id)
+                                        localStorage.setItem('photoUrl', docs.data().photoUrl)
                                         this.$router.push('/', () => {this.$router.go()})
                                     }
                                 }
@@ -119,6 +122,7 @@ export default {
                             localStorage.setItem('name', doc.data().name)
                             localStorage.setItem('logged', true)
                             localStorage.setItem('id', doc.id)
+                            localStorage.setItem('photoUrl', user.photoUrl)
                             this.$router.push('/', () => {this.$router.go()})
                         }
                         else {
@@ -129,6 +133,7 @@ export default {
                                     localStorage.setItem('type', 'teacher'),
                                     localStorage.setItem('logged', true)
                                     localStorage.setItem('id', docs.id)
+                                    localStorage.setItem('photoUrl', user.photoUrl)
                                     this.$router.push('/', () => {this.$router.go()})
                                 }
                                 else {

@@ -53,7 +53,7 @@ export default {
             ended: false,
             tolBarBtn: [
                 'microphone', 'camera', 'closedcaptions', 'fullscreen',
-                'hangup', 'chat',
+                'chat',
                 'raisehand',
                 'videoquality', 'filmstrip',
                 'tileview',
