@@ -18,6 +18,7 @@
 <script>
 import iframeViewer from '@/components/iframeViewer.vue'
 import commentSection from '@/components/commentSection.vue'
+import firebaseApp from '../firebaseConfig'
 
 export default {
     components: {
@@ -28,41 +29,17 @@ export default {
         return {
             logged: '',
             nid:'',
-            pdf: {
-                src: './../pdf/surfaces.pdf',
-                title: 'Pdf 1',
-                subtitle: 'Pdf about programming',
-                comments: [
-                    {
-                        name: 'Iresh Sharma',
-                        info: 'Hi this is my comment',
-                        created_at: '00:00:00',
-                        photoUrl: 'https://lh3.googleusercontent.com/a-/AOh14Giy9wcm08RzKyvi2eZOP8qRH9j3-EIvZKUNCc2xKw',
-                        replies: [
-                            {
-                                name: 'Iresh Sharma',
-                                info: 'Hi this is my comment',
-                                created_at: '00:00:00',
-                                photoUrl: 'https://lh3.googleusercontent.com/a-/AOh14Giy9wcm08RzKyvi2eZOP8qRH9j3-EIvZKUNCc2xKw',
-
-                            },
-                            {
-                                name: 'Azam Ansari',
-                                info: 'Hi this is my comment',
-                                created_at: '00:00:00',
-                                photoUrl: 'https://lh3.googleusercontent.com/a-/AOh14Giy9wcm08RzKyvi2eZOP8qRH9j3-EIvZKUNCc2xKw',
-
-                            }
-                        ]
-                    }
-                ]
-            }
+            pdf: {}
         }
     },
     beforeMount() {
         this.logged = localStorage.getItem('logged')
         this.nid = this.$route.params.id
-
+        console.log(this.nid)
+        firebaseApp.db.collection('pdf').doc(this.nid).get().then((pdf) => {
+            console.log(pdf.data)
+            this.pdf = pdf.data()
+        })
     }
 }
 </script>

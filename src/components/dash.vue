@@ -135,7 +135,7 @@ export default {
     if(localStorage.getItem('type') == 'admin') {
       firebaseApp.db.collection('admin').doc('pTA42ixCblHbbKcYQ2ft').onSnapshot((doc) => {
         this.teacher.batch = doc.data().batch
-        this.teacher.quizes = doc.data().quiz
+        this.teacher.quizes = doc.data().quizes
         this.teacher.tid = doc.id
         this.teacher.passHash = doc.data().passHash
       })

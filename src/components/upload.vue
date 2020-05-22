@@ -164,7 +164,12 @@ export default {
                         this.uploadValue=100;
                         storageRef.snapshot.ref.getDownloadURL().then((url)=>{
                             this.pdf.src = url;
-                            firebaseApp.db.collection('pdf').doc().set(this.pdf)
+                            this.pdf.id = Math.random().toString(34).substring(2,8)
+                            firebaseApp.db.collection('pdf').doc(this.pdf.id).set(this.pdf)
+                            firebaseApp.db.collection('count').doc('ZvZXwyhhYes2VSMCyYTD').get().then((count) => {
+                                var counter = count.pdf + 1
+                                firebaseApp.db.collection('count').doc('ZvZXwyhhYes2VSMCyYTD').update({pdf: counter})
+                            })
                         });
                     }
                 );
@@ -179,7 +184,7 @@ export default {
                 this.video.tid = localStorage.getItem('type') == 'admin' ? 'admin' : localStorage.getItem('tid')
                 const storageRef=firebaseApp.storageBucket.ref(`videos/${this.videoclass.name}`).put(this.videoclass);
                 storageRef.on(`state_changed`,snapshot => {
-                    this.uploadValuepdf = (snapshot.bytesTransferred/snapshot.totalBytes)*100;
+                    this.uploadValuevideo = (snapshot.bytesTransferred/snapshot.totalBytes)*100;
                     }, 
                     error => {
                         console.log(error.message)
@@ -188,7 +193,12 @@ export default {
                         this.uploadValue=100;
                         storageRef.snapshot.ref.getDownloadURL().then((url)=>{
                             this.video.src = url;
-                            firebaseApp.db.collection('video').doc().set(this.video)
+                            this.video.id = Math.random().toString(34).substring(2,8)
+                            firebaseApp.db.collection('video').doc(this.video.id).set(this.video)
+                            firebaseApp.db.collection('count').doc('ZvZXwyhhYes2VSMCyYTD').get().then((count) => {
+                                var counter = count.video + 1
+                                firebaseApp.db.collection('count').doc('ZvZXwyhhYes2VSMCyYTD').update({video: counter})
+                            })
                         });
                     }
                 );

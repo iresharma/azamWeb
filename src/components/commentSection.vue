@@ -55,13 +55,21 @@
                         <div class="field">
                             <div class="control" style="display: flex; flex-direction: row">
                                 <img style="width: 32px; height: 32px; border-radius: 100%; margin-right: 20px" :src="userphoto" alt="">
-                                <input class="input is-success" type="text" placeholder="Success input">
+                                <input class="input is-success" type="text" placeholder="Add reply">
                                 <a style="margin-left: 20px" class="button is-rounded is-success"><i class="fas fa-paper-plane"></i></a>
                             </div>
                         </div>
                     </div>
                 </div>
             </article>
+            </div>
+
+            <div class="field">
+                <div class="control" style="display: flex; flex-direction: row">
+                    <img style="width: 32px; height: 32px; border-radius: 100%; margin-right: 20px" :src="userphoto" alt="">
+                    <input class="input is-success" type="text" placeholder="Add comment">
+                    <a style="margin-left: 20px" class="button is-rounded is-success"><i class="fas fa-paper-plane"></i></a>
+                </div>
             </div>
         </div>
         

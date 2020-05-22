@@ -7,7 +7,6 @@
         "email": "",
         "batch": ["batch_id"],
         "quizes": ["eid"],
-        "teacher": ["tid"]
     },
     "teacher": {
         "tid": "",
@@ -104,7 +103,7 @@
         }
     },
     {
-        "length": {
+        "count": {
             "student": 0,
             "teacher": 0,
             "quiz": 0,

@@ -5,26 +5,21 @@
         <small class="text-muted" style="font-size: 2vh">Video lectures</small>
     </h1>
     </div>
-    <div class="columns is-multiline" v-for="notes in notes" :key="notes.id" style="padding:2.5%">
+    <div class="columns is-multiline" v-for="videos in video" :key="videos.id" style="padding:2.5%">
         <div class="column is-one-quarter">
             <div class="card">
-                <div class="card-image">
-                    <figure class="image is-4by3">
-                        <img src="https://bulma.io/images/placeholders/1280x960.png" alt="Placeholder image">
-                    </figure>
-                </div>
                 <div class="card-content">
                     <div class="media">
                     <div class="media-content has-text-centered">
-                        <p class="title is-4">{{notes.title}}</p>
+                        <p class="title is-4">{{videos.data.title}}</p>
                     </div>
                     </div>
                         
-                    <div class="content has-text-grey-lighter" style="height:100px;overflow:hidden">
-                    {{notes.desc}}
+                    <div class="content" style="height:100px;overflow:hidden">
+                    {{videos.data.subtitle}}
                     </div>
                     <div class="content">
-                    <button class="button is-warning is-focused" @click="$router.push('/videos/1')">Open Video</button>
+                    <button class="button is-warning is-focused" @click="$router.push('/videos/' + videos.data.id)">Open Video</button>
                     </div>
                 </div>
             </div>
@@ -39,16 +34,66 @@
 </style>
 
 <script>
+import firebaseApp from '../firebaseConfig'
 
 export default {
     data() {
         return {
             logged: '',
-            notes:[{title:"Video - 1",desc:"Hersiliidae is a tropical and subtropical family of spiders first described by Tamerlan Thorell in 1870,[1] which are commonly known as tree trunk spiders. They have two prominent spinnerets that are almost as long as their abdomen, earning them another nickname, the 'two-tailed spiders'. They range in size from 10 to 18 mm (0.4 to 0.7 in) long. Rather than using a web that captures prey directly, they lay a light coating of threads over an area of tree bark and wait for an insect to stray onto the patch. When this happens, they encircle their spinnerets around their prey while casting silk on it. When the insect is immobilized, they can bite it through the shroud."}],
+            video:[],
+            page: 0
         }
     },
     beforeMount() {
         this.logged = localStorage.getItem('logged')
+        firebaseApp.db.collection('video').orderBy('id').limit(12).get().then((videos) => {
+            this.video = []
+            videos.forEach((te) => {
+                var pdf = {
+                    id: te.id,
+                    data: te.data()
+                }
+                this.video.push(pdf)
+            })
+            this.last = this.video[11].id
+            this.first = this.video[0].id
+        })
     },
+    methods: {
+        loadNext() {
+            if(this.total/12 !== this.page) {
+                firebaseApp.db.collection('video').orderBy('id').startAfter(this.last).limit(12).onSnapshot((videos) => {
+                    this.video = []
+                    videos.forEach((te) => {
+                        var pdf = {
+                            id: te.id,
+                            data: te.data()
+                        }
+                        this.video.push(pdf)
+                    })
+                    this.page += 1
+
+                    this.last = this.video[11].id
+                    this.first = this.video[0].id
+                })
+            }
+        },
+        loadprev() {
+            firebaseApp.db.collection('video').orderBy('id').endBefore(this.first).limit(12).onSnapshot((videos) => {
+                this.video = []
+                videos.forEach((te) => {
+                    var pdf = {
+                        id: te.id,
+                        data: te.data()
+                    }
+                    this.video.push(pdf)
+                })
+                this.page -= 1
+
+                this.last = this.video[11].id
+                this.first = this.video[0].id
+            })
+        },
+    }
 }
 </script>
