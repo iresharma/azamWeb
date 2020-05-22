@@ -59,6 +59,9 @@
         <div class="column">
             <upload v-if="comp == 1" />
             <dash v-if="comp == 0" />
+            <admin v-if="comp == 6" />
+            <feeLedger v-if="comp == 4" />
+            <startClass v-if="comp == 3" />
         </div>
     </div>
 </template>
@@ -73,6 +76,9 @@
 <script>
 import upload from '@/components/upload.vue'
 import dash from '@/components/dash.vue'
+import admin from '@/components/systemSettings.vue'
+import feeLedger from '@/components/feeLedger.vue'
+import startClass from '@/components/startClass.vue'
 
 
 export default {
@@ -90,7 +96,10 @@ export default {
     },
     components: {
         upload,
-        dash
+        dash,
+        admin,
+        feeLedger,
+        startClass
     },
     methods: {
         change(ind) {

@@ -1,5 +1,5 @@
 <template>
-    <div style="width: 100vw;height: 100vh;background-image: url(&quot;./svg/loginsvg.svg&quot;);background-position: bottom;background-size: 70%">
+    <div style="width: 100vw;height: 83.5vh;background-image: url(&quot;./svg/loginsvg.svg&quot;);background-position: bottom;background-size: 70%">
         <div class="d-flex log-box flex-column justify-content-center" id="login-box" style="margin-top: 50px;">
             <div class="login-box-header">
                 <h4 style="color:rgb(139,139,139);margin-bottom:0px;font-weight:800;font-size:37px;">Login</h4>
@@ -9,7 +9,7 @@
                 <input type="password" class="password-input form-control" style="margin-top:10px;" required="true" placeholder="Password" v-model="password" minlength="6"></div>
             <div class="submit-row" style="margin-bottom:8px;padding-top:0px;"><button class="button is-rounded is-large" style="background-color: #ffdd57;color: black" id="submit-id-submit" @click="submiter">Login</button>
             <br>
-            <span style="color: red" v-if="invalid">user doesn't exist</span>
+            <span style="color: red" v-if="invalid">user doesn't exist</span><span style="color: red" v-if="passerr">incorrect password</span>
                 <div class="d-flex justify-content-between"><a id="forgot-password-link" href="#">Forgot Password?</a></div>
             </div>
             <div class="d-flex flex-row align-items-center login-box-seperator-container">
@@ -53,35 +53,114 @@
 <script>
 import firebase from 'firebase'
 import firebaseApp from '../firebaseConfig'
+import sha256 from 'js-sha256'
 
 export default {
     data() {
         return {
             email: '',
             password: '',
-            invalid: false
+            invalid: false,
+            passerr: false
         }
     },
     methods: {
         submiter() {
+            var hash = sha256(this.password)
+            firebaseApp.db.collection('admin').doc('pTA42ixCblHbbKcYQ2ft').get().then((doc) => {
+                if(this.email == doc.data().email){
+                    if(hash == doc.data().passHas) {
+                        localStorage.setItem('name', doc.data().name)
+                        localStorage.setItem('type', 'admin'),
+                        localStorage.setItem('logged', true)
+                        localStorage.setItem('id', doc.id)
+                        localStorage.setItem('photoUrl', doc.data().photoUrl)
+                        this.$router.push('/', () => {this.$router.go()})
+                    }
+                }
+                else {
+                    firebaseApp.db.collection('student').where('email', '==', this.email).get()
+                    .then(doce => {
+                        if(!doce.empty){
+                            console.log('hello')
+                            doce.forEach((student) => {
+                                if(hash == student.data().passHash) {
+                                    localStorage.setItem('name', student.data().name)
+                                    localStorage.setItem('type', 'student'),
+                                    localStorage.setItem('logged', true)
+                                    localStorage.setItem('id', student.id)
+                                    localStorage.setItem('photoUrl', student.data().photoUrl)
+                                    this.$router.push('/', () => {this.$router.go()})
+                                }
+                                else {
+                                    this.passerr = true
+                                }
+                            })
+                        }
+                        else {
+                            firebaseApp.db.collection('teacher').where('email', '==', this.email).get()
+                            .then((docs) => {
+                                if(!docs.empty) {
+                                    docs.forEach((teacher) => {
+                                        if(hash == teacher.data().passHash) {
+                                            localStorage.setItem('name', teacher.data().name)
+                                            localStorage.setItem('type', 'student'),
+                                            localStorage.setItem('logged', true)
+                                            localStorage.setItem('id', teacher.id)
+                                            localStorage.setItem('photoUrl', teacher.data().photoUrl)
+                                            this.$router.push('/', () => {this.$router.go()})
+                                        }
+                                        else {
+                                            this.passerr = true
+                                        }
+                                    })
+                                }
+                                else {
+                                    this.invalid = true
+                                }
+                            })
+                        }
+                    })
+                }
+            })
         },
         login: function() {
             var provider = new firebase.auth.GoogleAuthProvider();
             firebaseApp.auth.signInWithPopup(provider)
             .then(snapshot=>{
                 let user = snapshot.user
-                return firebaseApp.db.doc("users/"+user.uid).get()
+                firebaseApp.db.collection('student').where('email', '==', user.email).get()
                     .then(doc => {
-                        if(doc.exists){
-                            localStorage.setItem('photoUrl',user.photoURL)
-                            localStorage.setItem('name',user.displayName)
-                            localStorage.setItem('logged', true)
-                            console.log(user.email)
+                        if(!doc.empty) {
+                            doc.forEach((doce) => {
+                                localStorage.setItem('type', 'student'),
+                                localStorage.setItem('name', doce.data().name)
+                                localStorage.setItem('logged', true)
+                                localStorage.setItem('id', doce.id)
+                                localStorage.setItem('photoUrl', user.photoUrl)
+                                this.$router.push('/', () => {this.$router.go()})
+                            })
                         }
                         else {
-                            this.invalid = true
+                            firebaseApp.db.collection('teacher').where('email', '==', user.email).get()
+                            .then((docs) => {
+                                if(!docs.empty) {
+                                    docs.forEach((doce) => {
+                                        localStorage.setItem('name', doce.data().name)
+                                        localStorage.setItem('type', 'teacher'),
+                                        localStorage.setItem('logged', true)
+                                        localStorage.setItem('id', doce.id)
+                                        localStorage.setItem('photoUrl', user.photoUrl)
+                                        this.$router.push('/', () => {this.$router.go()})
+                                    })
+                                }
+                                else {
+                                    this.invalid = true
+                                }
+                            })
                         }
-                        })
+                        
+                    })
                 })
             }
         }

@@ -5,11 +5,11 @@
             <form>
                 <h2 class="text-center"><strong>Create</strong> an account.</h2>
                 <div v-if="tokenver">
-                    <div class="form-group"><input class="form-control" v-model="name" type="text" name="name" placeholder="Email"></div>
+                    <div class="form-group"><input class="form-control" v-model="name" type="text" name="name" placeholder="Name"></div>
                     <div class="form-group"><input class="form-control" v-model="email" type="email" name="email" placeholder="Email"></div>
                     <div class="form-group"><input class="form-control" v-model="password" type="password" name="password" placeholder="Password"></div>
                     <div class="form-group"><input class="form-control" v-model="passwordRepeat" type="password" name="password-repeat" placeholder="Password (repeat)"></div><br><span v-if="passerr">Both the password should match</span>
-                    <div class="form-group"><button class="btn btn-primary btn-block" style="background-color: #56C6C6; font-weight: 600" @click="login">Sign Up</button></div><a class="already" @click="$router.push('/login')">You already have an account? Login here.</a>
+                    <div class="form-group"><a class="btn btn-primary btn-block" style="background-color: #56C6C6; font-weight: 600" @click="login">Sign Up</a></div><a class="already" @click="$router.push('/login')">You already have an account? Login here.</a>
                     <div class="login-box-content">
                         <div class="gp-login box-shadow"><a class="d-flex flex-row align-items-center social-login-link" style="margin-bottom:10px;" @click="Login()"><i class="fa fa-google" style="color:rgb(255,255,255);width:56px;"></i>Signup with Google+</a></div>
                     </div>
@@ -70,7 +70,7 @@ export default {
                         this.showerr2 = true;
                     }
                     else {
-                        var newUse = docv.nUse - 1;
+                        var newUse = docv.nUse + 1;
                         this.tokenver = true;
                         this.type = docv.type;
                         this.batch_id = docv.batch
@@ -101,6 +101,15 @@ export default {
                                     quizes: [],
                                     batch: [this.batch_id]
                                 })
+                                firebaseApp.db.collection('count').doc('ZvZXwyhhYes2VSMCyYTD').get().then((count) => {
+                                    var counter = count.data().student + 1
+                                    firebaseApp.db.collection('count').doc('ZvZXwyhhYes2VSMCyYTD').update({student: counter})
+                                })
+                                localStorage.setItem('type', this.type)
+                                localStorage.setItem('logged', true)
+                                localStorage.setItem('id', id)
+                                localStorage.setItem('photoUrl', user.photoUrl)
+                                localStorage.setItem('name', user.displayName)
                             }
                             else {
                                 firebaseApp.db.collection(this.type).doc(id).set({
@@ -112,7 +121,17 @@ export default {
                                     quizes: [],
                                     batch: []
                                 })
+                                localStorage.setItem('type', this.type)
+                                localStorage.setItem('logged', true)
+                                localStorage.setItem('id', id)
+                                localStorage.setItem('photoUrl', user.photoUrl)
+                                localStorage.setItem('name', user.displayName)
+                                firebaseApp.db.collection('count').doc('ZvZXwyhhYes2VSMCyYTD').get().then((count) => {
+                                    var counter = count.data().teacher + 1
+                                    firebaseApp.db.collection('count').doc('ZvZXwyhhYes2VSMCyYTD').update({teacher: counter})
+                                })
                             }
+                            this.$router.push('/', this.$router.go())
                         }
                         else {
                             this.invalid = true
@@ -121,14 +140,13 @@ export default {
                 })
             },
             login() {
-                if(this.password == this.passwordRepeat) {
+                if(this.password !== this.passwordRepeat) {
                     this.passerr = true;
                 }
                 else {
                     var passHash = sha256(this.passwordRepeat)
                     var id = Math.random().toString(34).substring(2,8)
-                    if(this.type == 'student') {
-                        firebaseApp.db.collection(this.type).where('email', '==', this.email).get().theb((doc) => {
+                        firebaseApp.db.collection(this.type).where('email', '==', this.email).get().then((doc) => {
                             if(doc.empty) {
                                 if(this.type == 'student') {
                                     firebaseApp.db.collection(this.type).doc(id).set({
@@ -139,6 +157,15 @@ export default {
                                             email: this.email,
                                             quizes: [],
                                             batch: [this.batch_id]
+                                        })
+                                        localStorage.setItem('type', this.type)
+                                        localStorage.setItem('logged', true)
+                                        localStorage.setItem('id', id)
+                                        
+                                        localStorage.setItem('name', this.name)                                        
+                                        firebaseApp.db.collection('count').doc('ZvZXwyhhYes2VSMCyYTD').get().then((count) => {
+                                            var counter = count.data().student + 1
+                                            firebaseApp.db.collection('count').doc('ZvZXwyhhYes2VSMCyYTD').update({student: counter})
                                         })
                                     }
                                     else {
@@ -151,14 +178,26 @@ export default {
                                             quizes: [],
                                             batch: []
                                         })
+
+                                        localStorage.setItem('logged', true)
+                                        localStorage.setItem('id', id)
+                                        
+                                        localStorage.setItem('name', this.name)
+                                        
+                                        firebaseApp.db.collection('count').doc('ZvZXwyhhYes2VSMCyYTD').get().then((count) => {
+                                            var counter = count.data().teacher + 1
+                                            firebaseApp.db.collection('count').doc('ZvZXwyhhYes2VSMCyYTD').update({teacher: counter})
+                                        })
                                     }
+                                    this.$router.push('/', this.$router.go())
                                 }
                                 else {
                                     this.invalid = true
                                 }
                         })
+                    
                 }
-            }
+        }
     }
 }
 </script>

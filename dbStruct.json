@@ -6,7 +6,8 @@
         "sid": "",
         "email": "",
         "batch": ["batch_id"],
-        "quizes": ["eid"]
+        "quizes": ["eid"],
+        "teacher": ["tid"]
     },
     "teacher": {
         "tid": "",
@@ -102,4 +103,14 @@
             ]
         }
     },
+    {
+        "length": {
+            "student": 0,
+            "teacher": 0,
+            "quiz": 0,
+            "pdf": 0,
+            "video": 0,
+            "docref": "ZvZXwyhhYes2VSMCyYTD"
+        }
+    }
 }
