@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div style="line-height: 0.6;text-align: left; padding: 25px">
+    <div style="line-height: 0.6;text-align: left; padding: 25px;">
       <span style="font-size: 45px; font-weight: 600;"
         >Comments
         <small style="font-size: 15px" class="muted-text"
@@ -11,7 +11,7 @@
     </div>
 
     <div
-      style="border: 1px solid grey; margin: 30px; margin-top: 10px; padding: 10px; border-radius: 5px"
+      style="border: 1px solid grey; margin: 30px; margin-top: 10px; padding: 10px; border-radius: 5px; height: 40vh !important; overflow-y: scroll"
     >
       <div
         v-for="comment in comments"
@@ -21,7 +21,7 @@
       >
         <article class="media">
           <div class="media-left">
-            <figure class="image is-128x128">
+            <figure class="image is-64x64">
               <img :src="comment.photoUrl" alt="Image" />
             </figure>
           </div>
@@ -94,7 +94,7 @@
               >
                 <article class="media">
                   <div class="media-left">
-                    <figure class="image is-64x64">
+                    <figure class="image is-48x48">
                       <img
                         style=" border-radius: 100%"
                         :src="reply.photoUrl"
@@ -167,9 +167,9 @@
           </div>
         </article>
       </div>
-
-      <div class="field">
-        <div class="control" style="display: flex; flex-direction: row">
+    </div>
+    <div class="field" style="display: flex; justify-content: center">
+        <div class="control" style="display: flex; width: 80%; flex-direction: row">
           <img
             style="width: 32px; height: 32px; border-radius: 100%; margin-right: 20px"
             :src="userphoto"
@@ -190,7 +190,6 @@
           ></a>
         </div>
       </div>
-    </div>
   </div>
 </template>
 

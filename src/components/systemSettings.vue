@@ -14,16 +14,16 @@
                                     <br />
                                     <table>
                                         <tr>
-                                            <td><b>Teachers</b>: {{ total }}</td>
-                                            <td><b>Students</b>: {{ totalStudent }}</td>
+                                            <td><b>Teachers</b>: {{ count.teacher }}</td>
+                                            <td><b>Students</b>: {{ count.student }}</td>
                                         </tr>
                                         <tr>
-                                            <td><b>Videos</b>: 10</td>
-                                            <td><b>Notes</b>: 10</td>
+                                            <td><b>Videos</b>: {{ count.video }}</td>
+                                            <td><b>Notes</b>: {{ count.pdf }}</td>
                                         </tr>
                                         <tr>
-                                            <td><b>Live classes</b>: 10</td>
-                                            <td><b>Quizes</b>: 10</td>
+                                            <td><b>Live classes</b>: {{ count.liveClass }}</td>
+                                            <td><b>Quizes</b>: {{ count.quizes }}</td>
                                         </tr>
                                     </table>
                                 </p>
@@ -136,7 +136,6 @@ export default {
     name: 'adminSettings',
     data() {
         return {
-            teachers: [],
             admin: {},
             classes: 10,
             totalStudent: 0,
@@ -145,7 +144,8 @@ export default {
             page: 1,
             total: 1,
             token: '',
-            show: false
+            show: false,
+            count: {}
         }
     },
     beforeMount() {
@@ -154,7 +154,7 @@ export default {
             console.log(this.admin)
         })
         firebaseApp.db.collection('count').doc('ZvZXwyhhYes2VSMCyYTD').onSnapshot((doc) => {
-            this.total = doc.data().teacher
+            this.count = doc.data()
         })
         firebaseApp.db.collection('teacher').orderBy('tid').limit(10).onSnapshot((doc) => {
             this.teachers = []
@@ -208,11 +208,12 @@ export default {
             })
         },
         nStudent(batches) {
-            var students = 0
+            var tempArr = []
             batches.forEach((batch) => {
-                students = students + batch.student.length
+                tempArr = tempArr.concat(batch.student)
             })
-            return students
+            var studentArr = Array.from(new Set(tempArr))
+            return studentArr.length
         },
         removeTeacher(id) {
             var pass = prompt("Enter password");

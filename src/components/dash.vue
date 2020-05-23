@@ -144,6 +144,15 @@ export default {
         tid: "",
         created_at: "",
       },
+      count: {
+        teacher: 0,
+        batch: 0,
+        student: 0,
+        video: 0,
+        pdf: 0,
+        quiz: 0,
+        liveClass: 0
+      }
     };
   },
   components: {
@@ -179,11 +188,12 @@ export default {
   },
   methods: {
     countStudent() {
-      var stu = 0;
+      var tempArr = []
       this.teacher.batch.forEach((batch) => {
-        stu = stu + batch.student.length;
-      });
-      return stu;
+          tempArr = tempArr.concat(batch.student)
+      })
+      var studentArr = Array.from(new Set(tempArr))
+      return studentArr.length
     },
     deleteBatch(name, ind) {
       var pass = prompt("Enter password to delete " + name + " batch");
