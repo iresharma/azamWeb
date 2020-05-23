@@ -171,6 +171,7 @@ export default {
           },
           configOverwrite: {
             disableSimulcast: false,
+            disableDeepLinking: true
           },
         };
 
