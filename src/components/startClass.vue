@@ -123,6 +123,7 @@ export default {
   beforeMount() {
     this.user = localStorage.getItem("name");
     var type = localStorage.getItem("type");
+    var id = localStorage.getItem('id')
     if (type == "admin") {
       firebaseApp.db
         .collection("admin")
@@ -134,7 +135,7 @@ export default {
     } else {
       firebaseApp.db
         .collection("teacher")
-        .doc(localStorage.getItem("id"))
+        .doc(id)
         .get()
         .then((doc) => {
           this.teacher = doc.data();

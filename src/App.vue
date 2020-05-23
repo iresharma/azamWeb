@@ -11,7 +11,7 @@
               alt="love">
                 </i> 
                 by 
-                <a href="http://iresharma.me" target="_blank"> Iresharma and team
+                <a href="http://iresharma.me" target="_blank"> Iresharma
                 </a>
           </div>
 </footer>

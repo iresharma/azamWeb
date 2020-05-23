@@ -76,14 +76,7 @@
     },
     "quiz": {
         "eid": "",
-        "questions": [
-            {
-                "qid": "",
-                "question": "",
-                "type": "",
-                "mcq": ""
-            }
-        ],
+        "questions": "",
         "batch": "batch_id"
     },
     {

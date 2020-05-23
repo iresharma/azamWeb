@@ -23,53 +23,75 @@
           </article>
         </div>
         <div class="box contact">
-            <strong>Contact admin</strong><br>
-            <input type="text" class="input" v-model="contact.subject" placeholder="subject"><br>
-            <input type="textarea" class="input" v-model="contact.query" placeholder="query">
-            <div style="display: flex; justify-content: flex-end; margin-top: 5px">
-                <a class="button is-rounded is-small is-warning">SUBMIT</a>
-            </div>
+          <strong>Contact admin</strong><br />
+          <input
+            type="text"
+            class="input"
+            v-model="contact.subject"
+            placeholder="subject"
+          /><br />
+          <input
+            type="textarea"
+            class="input"
+            v-model="contact.query"
+            placeholder="query"
+          />
+          <div
+            style="display: flex; justify-content: flex-end; margin-top: 5px"
+          >
+            <a class="button is-rounded is-small is-warning">SUBMIT</a>
+          </div>
         </div>
       </div>
-      <div class="column is-6" id="whocares" style="">
-      </div>
+      <div class="column is-6" id="whocares" style=""></div>
     </div>
     <div class="box is-12">
-        <div style="display: flex; justify-content: space-between;">
-            <h1 style="font-weight:600; font-size: 3vh; ">Batch management<br>
-            <small class="text-muted" style="font-size: 2vh">Add, delete and edit batches</small>
-            </h1>
-            <a class="button is-success" @click="addBatch = true;">Add batch</a>
-        </div>
-        <table class="table is-fullwidth is-hoverable">
-            <tr>
-                <th>
-                    Batch Name
-                </th>
-                <th>
-                    No. of students
-                </th>
-                <th>
-                    Actions
-                </th>
-            </tr>
-            <tr v-for="(Batch,ind) in teacher.batch" :key="Batch.batch_id">
-                <td>
-                    {{ Batch.name }}
-                </td>
-                <td>
-                    {{ Batch.student.length }}
-                </td>
-                <td>
-                    <a @click="openEdit(Batch)" class="button is-small is-rounded is-primary">Edit</a>
-                    <a @click="deleteBatch(Batch.name, ind)" class="button is-small is-rounded is-danger">Delete batch</a>
-                </td>
-            </tr>
-        </table>
+      <div style="display: flex; justify-content: space-between;">
+        <h1 style="font-weight:600; font-size: 3vh; ">
+          Batch management<br />
+          <small class="text-muted" style="font-size: 2vh"
+            >Add, delete and edit batches</small
+          >
+        </h1>
+        <a class="button is-success" @click="addBatch = true">Add batch</a>
+      </div>
+      <table class="table is-fullwidth is-hoverable">
+        <tr>
+          <th>
+            Batch Name
+          </th>
+          <th>
+            No. of students
+          </th>
+          <th>
+            Actions
+          </th>
+        </tr>
+        <tr v-for="(Batch, ind) in teacher.batch" :key="Batch.batch_id">
+          <td>
+            {{ Batch.name }}
+          </td>
+          <td>
+            {{ Batch.student.length }}
+          </td>
+          <td>
+            <a
+              @click="openEdit(Batch)"
+              class="button is-small is-rounded is-primary"
+              >Edit</a
+            >
+            <a
+              @click="deleteBatch(Batch.name, ind)"
+              class="button is-small is-rounded is-danger"
+              >Delete batch</a
+            >
+          </td>
+        </tr>
+      </table>
     </div>
   </div>
   <div v-else-if="editBatch && !addBatch" style="padding: 25px">
-      <edit :batch="passBatch" />
+    <edit :batch="passBatch" />
   </div>
   <div v-else-if="!editBatch && addBatch">
     <add />
@@ -78,28 +100,28 @@
 
 <style scoped>
 .contact strong {
-    font-size: 15px;
-    margin: 5px;
+  font-size: 15px;
+  margin: 5px;
 }
 .contact input {
-    margin: 7px;
+  margin: 7px;
 }
 td a {
-    margin: 4px;
+  margin: 4px;
 }
 #whocares {
-  background-image: url("../assets/svg/dash.svg"); 
-  background-size: 80%; 
-  background-repeat: no-repeat; 
-  background-position: center
+  background-image: url("../assets/svg/dash.svg");
+  background-size: 80%;
+  background-repeat: no-repeat;
+  background-position: center;
 }
 </style>
 
 <script>
-import add from './addBatch'
-import sha256 from 'js-sha256'
-import edit from './editBatch.vue'
-import firebaseApp from '../firebaseConfig'
+import add from "./addBatch";
+import sha256 from "js-sha256";
+import edit from "./editBatch.vue";
+import firebaseApp from "../firebaseConfig";
 
 export default {
   data() {
@@ -114,40 +136,45 @@ export default {
         quizes: [""],
         email: "",
         batch: [],
-        passHash: ''
+        passHash: "",
       },
       contact: {
-          subject: '',
-          query: '',
-          tid: '',
-          created_at: ''
-      }
+        subject: "",
+        query: "",
+        tid: "",
+        created_at: "",
+      },
     };
   },
   components: {
     edit,
-    add
+    add,
   },
   beforeMount() {
     this.teacher.photoUrl = localStorage.getItem("photoUrl");
     this.teacher.name = localStorage.getItem("name");
     this.teacher.email = localStorage.getItem("email");
-    if(localStorage.getItem('type') == 'admin') {
-      firebaseApp.db.collection('admin').doc('pTA42ixCblHbbKcYQ2ft').onSnapshot((doc) => {
-        this.teacher.batch = doc.data().batch
-        this.teacher.quizes = doc.data().quizes
-        this.teacher.tid = doc.id
-        this.teacher.passHash = doc.data().passHash
-      })
-    }
-    else {
-      this.teacher.tid = localStorage.getItem('id')
-      firebaseApp.db.collection('teacher').doc(this.teacher.tid).onSnapshot((doc) => {
-        this.teacher.batch = doc.data().batch
-        this.teacher.quizes = doc.data().quiz
-        this.teacher.tid = doc.id
-        this.teacher.passHash = doc.data().passHash
-      })
+    if (localStorage.getItem("type") == "admin") {
+      firebaseApp.db
+        .collection("admin")
+        .doc("pTA42ixCblHbbKcYQ2ft")
+        .onSnapshot((doc) => {
+          this.teacher.batch = doc.data().batch;
+          this.teacher.quizes = doc.data().quizes;
+          this.teacher.tid = doc.id;
+          this.teacher.passHash = doc.data().passHash;
+        });
+    } else {
+      this.teacher.tid = localStorage.getItem("id");
+      firebaseApp.db
+        .collection("teacher")
+        .doc(this.teacher.tid)
+        .onSnapshot((doc) => {
+          this.teacher.batch = doc.data().batch;
+          this.teacher.quizes = doc.data().quiz;
+          this.teacher.tid = doc.id;
+          this.teacher.passHash = doc.data().passHash;
+        });
     }
   },
   methods: {
@@ -159,22 +186,27 @@ export default {
       return stu;
     },
     deleteBatch(name, ind) {
-        var pass = prompt("Enter password to delete " + name + ' batch')
-        var hash = sha256(pass).toString()
-        if(hash == this.teacher.passHash) {
-          this.teacher.batch.splice(ind, 1)
-          if(localStorage.getItem('type') == 'admin') {
-            firebaseApp.db.collection('admin').doc('pTA42ixCblHbbKcYQ2ft').update(this.teacher)
-          }
-          else {
-            firebaseApp.db.collection('teacher').doc(this.teacher.tid).update(this.teacher)
-          }
+      var pass = prompt("Enter password to delete " + name + " batch");
+      var hash = sha256(pass).toString();
+      if (hash == this.teacher.passHash) {
+        this.teacher.batch.splice(ind, 1);
+        if (localStorage.getItem("type") == "admin") {
+          firebaseApp.db
+            .collection("admin")
+            .doc("pTA42ixCblHbbKcYQ2ft")
+            .update(this.teacher);
+        } else {
+          firebaseApp.db
+            .collection("teacher")
+            .doc(this.teacher.tid)
+            .update(this.teacher);
         }
+      }
     },
     openEdit(batch) {
-      this.passBatch = batch
-      this.editBatch = true; 
-    }
+      this.passBatch = batch;
+      this.editBatch = true;
+    },
   },
 };
 </script>

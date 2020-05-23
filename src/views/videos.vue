@@ -5,8 +5,8 @@
         <small class="text-muted" style="font-size: 2vh">Video lectures</small>
     </h1>
     </div>
-    <div class="columns is-multiline" v-for="videos in video" :key="videos.id" style="padding:2.5%">
-        <div class="column is-one-quarter">
+    <div class="columns is-multiline" >
+        <div class="column is-one-quarter" v-for="videos in video" :key="videos.id" style="padding:2.5%">
             <div class="card">
                 <div class="card-content">
                     <div class="media">

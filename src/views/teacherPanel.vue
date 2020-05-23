@@ -62,6 +62,7 @@
             <admin v-if="comp == 6" />
             <feeLedger v-if="comp == 4" />
             <startClass v-if="comp == 3" />
+            <quiz v-if="comp == 2" />
         </div>
     </div>
 </template>
@@ -74,6 +75,7 @@
 </style>
 
 <script>
+import quiz from '@/components/quiz.vue'
 import upload from '@/components/upload.vue'
 import dash from '@/components/dash.vue'
 import admin from '@/components/systemSettings.vue'
@@ -99,7 +101,8 @@ export default {
         dash,
         admin,
         feeLedger,
-        startClass
+        startClass,
+        quiz
     },
     methods: {
         change(ind) {

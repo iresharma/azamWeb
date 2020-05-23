@@ -5,8 +5,8 @@
         <small class="text-muted" style="font-size: 2vh">PDF notes downloadable</small>
     </h1>
     </div>
-    <div class="columns is-multiline" v-for="pdfs in pdf" :key="pdfs.id" style="padding:2.5%">
-        <div class="column is-one-quarter">
+    <div class="columns" >
+        <div class="column is-3" v-for="pdfs in pdf" :key="pdfs.id" style="padding:2.5%">
             <div class="card">
                 <div class="card-content">
                     <div class="media">
@@ -47,7 +47,7 @@ export default {
     },
     beforeMount() {
         this.logged = localStorage.getItem('logged')
-        firebaseApp.db.collection('pdf').orderBy('id').limit(12).get().then((pdfs) => {
+        firebaseApp.db.collection('pdf').orderBy('id').limit(12).onSnapshot((pdfs) => {
             this.pdf = []
             pdfs.forEach((te) => {
                 var pdf = {
