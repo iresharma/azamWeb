@@ -22,7 +22,7 @@
       </tr>
       <tr v-for="stud in batch.student" :key="stud">
         <td>
-          to be added
+          {{ students[stud]['name'] }}
         </td>
         <td>
           <a class="button is-danger is-inverted">Remove</a>
@@ -35,9 +35,23 @@
 <style scoped></style>
 
 <script>
+import firebaseApp from '../firebaseConfig'
 export default {
   props: {
     batch: Object,
   },
+  data() {
+    return {
+      students: {}
+    }
+  },
+  beforeMount() {
+    this.batch.student.forEach((student) => {
+      firebaseApp.db.collection('student').doc(student).get().then((add) => {
+        this.students[student] = add.data()
+      })
+    })
+    console.log(this.students)
+  }
 };
 </script>
