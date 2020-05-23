@@ -12,7 +12,7 @@
             </vue-plyr>
         </div>
         <div>
-            <commentSection :comments="video.comments" />
+            <commentSection :comments="video.comments" :pdf="''" :video="video.id" />
         </div>
     
     </div>

@@ -15,7 +15,14 @@
                 <div class="media-content">
                     <div class="content" style="padding: 20px">
                         <div style="display: flex;flex-direction: row; justify-content: space-between">
-                            <div><strong>{{ comment.name }}</strong></div>
+                            <div>
+                                <strong v-if="comment.name === 'Azam Ansari'" style="color: #01D2B2">{{ comment.name }}&nbsp;
+                                <svg class="bi bi-check-all" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd" d="M12.354 3.646a.5.5 0 010 .708l-7 7a.5.5 0 01-.708 0l-3.5-3.5a.5.5 0 11.708-.708L5 10.293l6.646-6.647a.5.5 0 01.708 0z" clip-rule="evenodd"/>
+                                    <path d="M6.25 8.043l-.896-.897a.5.5 0 10-.708.708l.897.896.707-.707zm1 2.414l.896.897a.5.5 0 00.708 0l7-7a.5.5 0 00-.708-.708L8.5 10.293l-.543-.543-.707.707z"/>
+                                </svg>
+                                </strong><strong v-else>{{ comment.name }}</strong>
+                            </div>
                             <div><small>{{ comment.created_at }}</small></div>
                         </div>
                         <br>
@@ -55,8 +62,8 @@
                         <div class="field">
                             <div class="control" style="display: flex; flex-direction: row">
                                 <img style="width: 32px; height: 32px; border-radius: 100%; margin-right: 20px" :src="userphoto" alt="">
-                                <input class="input is-success" type="text" placeholder="Add reply">
-                                <a style="margin-left: 20px" class="button is-rounded is-success"><i class="fas fa-paper-plane"></i></a>
+                                <input v-model="reply" class="input is-success" type="text" @keydown.prevent.enter="addReply(comment)" placeholder="Add reply">
+                                <a style="margin-left: 20px" class="button is-rounded is-success" @click="addReply(comment)"><i class="fas fa-paper-plane"></i></a>
                             </div>
                         </div>
                     </div>
@@ -67,8 +74,8 @@
             <div class="field">
                 <div class="control" style="display: flex; flex-direction: row">
                     <img style="width: 32px; height: 32px; border-radius: 100%; margin-right: 20px" :src="userphoto" alt="">
-                    <input class="input is-success" type="text" placeholder="Add comment">
-                    <a style="margin-left: 20px" class="button is-rounded is-success"><i class="fas fa-paper-plane"></i></a>
+                    <input v-model="comment" class="input is-success" type="text" @keydown.prevent.enter="addComment()" placeholder="Add comment">
+                    <a style="margin-left: 20px" class="button is-rounded is-success" @click="addComment()"><i class="fas fa-paper-plane"></i></a>
                 </div>
             </div>
         </div>
@@ -78,20 +85,103 @@
 </template>
 
 <script>
+import firebaseApp from '../firebaseConfig'
 export default {
     name: 'commentSection',
     props: {
-        comments: Array
+        comments: Array,
+        pdf: String,
+        video: String
     },
     data() {
         return {
             showrep: false,
             autofoc: false,
             userphoto: '',
+            comment: '',
+            reply: ''
         }
     },
     beforeMount() {
         this.userphoto = localStorage.getItem('photoUrl')
+    },
+    methods: {
+         addComment() {
+             var name = ''
+             var date,today,time,dateTime;
+             var comment = {}
+             if(this.pdf == '') {
+                name = localStorage.getItem('name')
+                today = new Date();
+                date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+                time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+                dateTime = date+' '+time;
+                 comment = {
+                     replies: [],
+                     name: name,
+                     photoUrl: this.userphoto,
+                    info: this.comment,
+                    created_at: dateTime
+                 }
+                 this.comments.push(comment)
+                 firebaseApp.db.collection('video').doc(this.video).update({comments: this.comments})
+             }
+             else {
+                today = new Date();
+                date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+                time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+                dateTime = date+' '+time;
+                 console.log(dateTime)
+
+                name = localStorage.getItem('name')
+                comment = {
+                     replies: [],
+                     name: name,
+                     photoUrl: this.userphoto,
+                    info: this.comment,
+                    created_at: dateTime
+                 }
+                 this.comments.push(comment)
+                 firebaseApp.db.collection('pdf').doc(this.pdf).update({comments: this.comments})
+             }
+         },
+         addReply(parentComment) {
+             var name = ''
+             var date,today,time,dateTime;
+             var comment = {}
+             if(this.pdf == '') {
+                name = localStorage.getItem('name')
+                today = new Date();
+                date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+                time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+                dateTime = date+' '+time;
+                 comment = {
+                     name: name,
+                     photoUrl: this.userphoto,
+                    info: this.reply,
+                    created_at: dateTime
+                 }
+                 parentComment.replies.push(comment)
+                 firebaseApp.db.collection('video').doc(this.video).update({comments: this.comments})
+             }
+             else {
+                today = new Date();
+                date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+                time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+                dateTime = date+' '+time;
+                 console.log(dateTime)
+
+                name = localStorage.getItem('name')
+                comment = {
+                     name: name,
+                     photoUrl: this.userphoto,
+                    info: this.reply,
+                    created_at: dateTime
+                 }
+                 parentComment.replies.push(comment)
+                 firebaseApp.db.collection('pdf').doc(this.pdf).update({comments: this.comments})
+             }
+         }
     }
 }
 </script>

@@ -6,7 +6,7 @@
         </h1>
         </div>
     <iframeViewer name="note1" :link="pdf.src" style="width:70vw;height:80vh"/>
-    <commentSection :comments="pdf.comments" />
+    <commentSection :comments="pdf.comments" :pdf="pdf.id" :video="''"/>
     
     </div>
 </template>
