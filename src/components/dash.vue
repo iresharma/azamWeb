@@ -61,7 +61,7 @@
                     {{ Batch.student.length }}
                 </td>
                 <td>
-                    <a @click="editBatch = true; passBatch = Batch" class="button is-small is-rounded is-primary">Edit</a>
+                    <a @click="openEdit(Batch)" class="button is-small is-rounded is-primary">Edit</a>
                     <a @click="deleteBatch(Batch.name, ind)" class="button is-small is-rounded is-danger">Delete batch</a>
                 </td>
             </tr>
@@ -170,6 +170,10 @@ export default {
             firebaseApp.db.collection('teacher').doc(this.teacher.tid).update(this.teacher)
           }
         }
+    },
+    openEdit(batch) {
+      this.passBatch = batch
+      this.editBatch = true; 
     }
   },
 };

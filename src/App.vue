@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" style="overflow-x: hidden">
     <navbarlog v-if="logged == 'true'" live="nav-link aim active" home="aim nav-link" video="nav-link aim" notes="nav-link aim" />
     <navbar v-else home="aim nav-link" live="nav-link aim active" video="nav-link aim" notes=" nav-link aim" />
     <router-view/>

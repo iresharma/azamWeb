@@ -1,5 +1,5 @@
 <template>
-    <div style="width: 100vw;height: 83.5vh;background-image: url(&quot;./svg/loginsvg.svg&quot;);background-position: bottom;background-size: 70%">
+    <div id="fuck">
         <div class="d-flex log-box flex-column justify-content-center" id="login-box" style="margin-top: 50px;">
             <div class="login-box-header">
                 <h4 style="color:rgb(139,139,139);margin-bottom:0px;font-weight:800;font-size:37px;">Login</h4>
@@ -30,6 +30,14 @@
 </template>
 
 <style scoped>
+
+#fuck {
+    width: 100vw;
+    height: 83.5vh;
+    background-image: url("../assets/svg/loginsvg.svg");
+    background-position: bottom;
+    background-size: 70%
+}
 
 .log-box {
     width: 30vw;

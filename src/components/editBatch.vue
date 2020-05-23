@@ -13,6 +13,7 @@
     </h1>
     <table style="margin-top: 20px" class="table is-fullwidth is-hoverable">
       <tr>
+        <th></th>
         <th>
           Student
         </th>
@@ -20,9 +21,14 @@
           Action
         </th>
       </tr>
-      <tr v-for="stud in batch.student" :key="stud">
+      <tr v-for="stud in studen" :key="stud">
         <td>
-          {{ students[stud]['name'] }}
+          <figure class="image is-48x48">
+            <img :src="stud['photoUrl']" :alt="stud['name']">
+          </figure>
+        </td>
+        <td>
+          {{ stud['name']}}
         </td>
         <td>
           <a class="button is-danger is-inverted">Remove</a>
@@ -37,21 +43,22 @@
 <script>
 import firebaseApp from '../firebaseConfig'
 export default {
-  props: {
-    batch: Object,
-  },
-  data() {
-    return {
-      students: {}
+  data(){
+    return{
+      studen:[]
     }
   },
-  beforeMount() {
-    this.batch.student.forEach((student) => {
-      firebaseApp.db.collection('student').doc(student).get().then((add) => {
-        this.students[student] = add.data()
+  props: {
+    batch: Object
+  },
+  beforeMount(){
+    console.log(this.batch)
+
+    this.batch['student'].forEach((std)=>{
+      firebaseApp.db.collection('student').doc(std).get().then((val) => {
+            this.studen.push(val.data())
       })
     })
-    console.log(this.students)
   }
 };
 </script>
