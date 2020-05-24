@@ -164,7 +164,11 @@ export default {
             this.uploadValue = 100;
             storageRef.snapshot.ref.getDownloadURL().then((url) => {
               this.pdf.src = url;
-              this.pdf.batch = this.batches;
+              this.teacher.batch.forEach((batch) => {
+                if(batch.name == this.batches) {
+                  this.pdf.batch = batch.batch_id
+                }
+              })
               this.pdf.id = Math.random()
                 .toString(34)
                 .substring(2, 8);

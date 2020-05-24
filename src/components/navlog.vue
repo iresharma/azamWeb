@@ -26,6 +26,11 @@
               >Live Class</a
             >
           </li>
+          <li class="nav-item" v-if="type == 'student'" role="presentation">
+            <a class="aim nav-link" @click="$router.push('/quiz')"
+              >Quiz</a
+            >
+          </li>
           <li
             v-if="type == 'teacher' || type == 'admin'"
             class="nav-item"
