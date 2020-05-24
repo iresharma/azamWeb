@@ -246,7 +246,10 @@ export default {
             this.show = true
             firebaseApp.db.collection('token').doc(this.token).set({
                 token: this.token,
-                type: 'teacher'
+                type: 'teacher',
+                nTotal: 1,
+                nUse: 0,
+                creator: 'admin'
             })
         }
     }

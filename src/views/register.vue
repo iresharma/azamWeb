@@ -640,6 +640,7 @@ export default {
                 localStorage.setItem("id", id);
 
                 localStorage.setItem("name", this.name);
+                localStorage.setItem('type', this.type)
 
                 firebaseApp.db
                   .collection("count")
