@@ -16,7 +16,7 @@
                   <br />
                   Batches: {{ teacher.batch.length }} <br />
                   Students: {{ countStudent() }} <br />
-                  Quizzes: {{ teacher.quizes.length }}
+                  Quizzes: {{ teacher.quizes == undefined ? 0 : teacher.quizes.length }}
                 </p>
               </div>
             </div>
@@ -201,11 +201,12 @@ export default {
       var hash = sha256(pass).toString();
       if (hash == this.teacher.passHash) {
         this.teacher.batch.splice(ind, 1);
+        var bat = this.teacher.batch
         if (localStorage.getItem("type") == "admin") {
           firebaseApp.db
             .collection("admin")
             .doc("pTA42ixCblHbbKcYQ2ft")
-            .update(this.teacher);
+            .update({batch: bat});
           firebaseApp.db
               .collection("count")
               .doc()
@@ -221,7 +222,7 @@ export default {
           firebaseApp.db
             .collection("teacher")
             .doc(this.teacher.tid)
-            .update(this.teacher);
+            .update({batch: bat});
             firebaseApp.db
               .collection("count")
               .doc()
