@@ -145,7 +145,8 @@ export default {
             total: 1,
             token: '',
             show: false,
-            count: {}
+            count: {},
+            teachers: []
         }
     },
     beforeMount() {
@@ -156,7 +157,7 @@ export default {
         firebaseApp.db.collection('count').doc('ZvZXwyhhYes2VSMCyYTD').onSnapshot((doc) => {
             this.count = doc.data()
         })
-        firebaseApp.db.collection('teacher').orderBy('tid').limit(10).onSnapshot((doc) => {
+        firebaseApp.db.collection('teacher').orderBy('id').limit(10).onSnapshot((doc) => {
             this.teachers = []
             doc.forEach((te) => {
                 var teacher = {
@@ -186,7 +187,7 @@ export default {
                     })
                     this.page += 1
 
-                    this.last = this.teachers[9].id
+                    this.last = this.teachers[this.teachers.length - 1].id
                     this.first = this.teachers[0].id
                 })
             }
@@ -203,7 +204,7 @@ export default {
                 })
                 this.page -= 1
 
-                this.last = this.teachers[9].id
+                this.last = this.teachers[this.teachers.length - 1].id
                 this.first = this.teachers[0].id
             })
         },

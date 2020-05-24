@@ -23,9 +23,8 @@
                 :value="user"
                 minlength="6"
               />
-              {{ classname }}
-              {{ classinfo }}
-              {{ activeBatch }}
+              <strong>Class name:</strong>{{ classname }}
+              <small class="muted-tex">Class info: </small>{{ classinfo }}
             </div>
             <div
               class="submit-row"

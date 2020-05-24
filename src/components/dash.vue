@@ -189,6 +189,7 @@ export default {
   methods: {
     countStudent() {
       var tempArr = []
+      console.log(this.teacher)
       this.teacher.batch.forEach((batch) => {
           tempArr = tempArr.concat(batch.student)
       })
@@ -205,11 +206,33 @@ export default {
             .collection("admin")
             .doc("pTA42ixCblHbbKcYQ2ft")
             .update(this.teacher);
+          firebaseApp.db
+              .collection("count")
+              .doc()
+              .get()
+              .then((count) => {
+                var counter = count.data().batch - 1;
+                firebaseApp.db
+                  .collection("count")
+                  .doc('ZvZXwyhhYes2VSMCyYTD')
+                  .update({ batch: counter });
+              });
         } else {
           firebaseApp.db
             .collection("teacher")
             .doc(this.teacher.tid)
             .update(this.teacher);
+            firebaseApp.db
+              .collection("count")
+              .doc()
+              .get()
+              .then((count) => {
+                var counter = count.data().batch - 1;
+                firebaseApp.db
+                  .collection("count")
+                  .doc('ZvZXwyhhYes2VSMCyYTD')
+                  .update({ batch: counter });
+              });
         }
       }
     },

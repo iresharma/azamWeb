@@ -51,7 +51,11 @@
           {{ stud["name"] }}
         </td>
         <td>
-          <a class="button is-danger is-inverted">Remove</a>
+          <a
+            class="button is-danger is-inverted"
+            @click="removeStudent(stud['id'])"
+            >Remove</a
+          >
         </td>
       </tr>
     </table>
@@ -75,14 +79,71 @@ export default {
     console.log(this.batch);
 
     this.batch["student"].forEach((std) => {
-      firebaseApp.db
+      if(std != '') {
+        firebaseApp.db
         .collection("student")
         .doc(std)
-        .get()
-        .then((val) => {
+        .onSnapshot((val) => {
           this.studen.push(val.data());
         });
+      }
     });
+  },
+  methods: {
+    removeStudent(id) {
+      firebaseApp.db
+        .collection("student")
+        .doc(id)
+        .get()
+        .then((student) => {
+          var batch = student.data().batch;
+          batch = batch.filter((val) => {
+            return val != this.batch.batch_id;
+          });
+          if (batch.length == 0) {
+            firebaseApp.db
+              .collection("student")
+              .doc(id)
+              .delete();
+            firebaseApp.db
+              .collection("count")
+              .doc("ZvZXwyhhYes2VSMCyYTD")
+              .get()
+              .then((student) => {
+                var counter = student.data().student - 1;
+                firebaseApp.db
+                  .collection("count")
+                  .doc("ZvZXwyhhYes2VSMCyYTD")
+                  .update({ student: counter });
+              });
+          } else {
+            firebaseApp.db
+              .collection("student")
+              .doc(id)
+              .update({ batch: batch });
+          }
+        });
+      this.batch.student = this.batch.student.filter((val) => {
+        return val != id;
+      });
+      var type = localStorage.getItem("type");
+      var tid = localStorage.getItem("id");
+      firebaseApp.db
+        .collection(type)
+        .doc(tid)
+        .get().then((batcharr) => {
+          var bat = []
+          batcharr.data().batch.filter((ba) => {
+            if(ba.batch_id == this.batch.batch_id) {
+              bat.push(this.batch)
+            }
+            else {
+              bat.push(ba)
+            }
+          })
+          firebaseApp.db.collection(type).doc(tid).update({batch: bat})
+        })
+    },
   },
 };
 </script>

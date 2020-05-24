@@ -151,6 +151,8 @@ export default {
             .doc("ZvZXwyhhYes2VSMCyYTD")
             .update({ batch: counter });
         });
+      if (localStorage.getItem("type") == "teacher") {
+
       firebaseApp.db
         .collection("token")
         .doc(this.token)
@@ -160,8 +162,8 @@ export default {
           nTotal: this.nTotal,
           nUse: 0,
           type: this.type,
+          creator: tid
         });
-      if (localStorage.getItem("type") == "teacher") {
         firebaseApp.db
           .collection("teacher")
           .doc(tid)
@@ -171,14 +173,37 @@ export default {
             docv.batch.push({
               batch_id: bid,
               name: this.batchName,
-              student: [""],
+              student: [],
             });
             firebaseApp.db
               .collection("teacher")
               .doc(tid)
               .update(docv);
+            firebaseApp.db
+              .collection("count")
+              .doc('ZvZXwyhhYes2VSMCyYTD')
+              .get()
+              .then((count) => {
+                var counter = count.data().batch + 1;
+                firebaseApp.db
+                  .collection("count")
+                  .doc('ZvZXwyhhYes2VSMCyYTD')
+                  .update({ batch: counter });
+              });
           });
       } else {
+
+      firebaseApp.db
+        .collection("token")
+        .doc(this.token)
+        .set({
+          token: this.token,
+          batch: bid,
+          nTotal: this.nTotal,
+          nUse: 0,
+          type: this.type,
+          creator: 'admin'
+        });
         firebaseApp.db
           .collection("admin")
           .doc("pTA42ixCblHbbKcYQ2ft")
@@ -188,12 +213,23 @@ export default {
             docv.batch.push({
               batch_id: bid,
               name: this.batchName,
-              student: [""],
+              student: [],
             });
             firebaseApp.db
               .collection("admin")
               .doc("pTA42ixCblHbbKcYQ2ft")
               .update(docv);
+          });
+        firebaseApp.db
+          .collection("count")
+          .doc()
+          .get()
+          .then((count) => {
+            var counter = count.data().batch + 1;
+            firebaseApp.db
+              .collection("count")
+              .doc('ZvZXwyhhYes2VSMCyYTD')
+              .update({ batch: counter });
           });
       }
     },

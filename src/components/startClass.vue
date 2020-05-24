@@ -191,7 +191,10 @@ export default {
     },
     openRoom() {
       // verify the JitsiMeetExternalAPI constructor is added to the global..
-
+      firebaseApp.db.collection('count').doc().get().then((liveClass) => {
+        var counter = liveClass.data().liveClass + 1
+        firebaseApp.db.collection('count').doc().update({liveClass: counter})
+      })
       for (var i = 0; i < 400; i++) {
         if (this.ready) {
           if (window.JitsiMeetExternalAPI) {

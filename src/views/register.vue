@@ -398,6 +398,7 @@ export default {
       password: "",
       passwordRepeat: "",
       passerr: false,
+      creator: ''
     };
   },
   methods: {
@@ -417,6 +418,7 @@ export default {
               var newUse = docv.nUse + 1;
               this.tokenver = true;
               this.type = docv.type;
+              this.creator = docv.creator
               this.batch_id = docv.batch;
               firebaseApp.db
                 .collection("token")
@@ -455,6 +457,41 @@ export default {
                     quizes: [],
                     batch: [this.batch_id],
                   });
+                  if(this.creator == 'admin') {
+                  console.log('here')
+                    firebaseApp.db.collection('admin').doc('pTA42ixCblHbbKcYQ2ft').get().then((add) => {
+                        var bat = [];
+                      add.data().batch.forEach((batch) =>{
+                        if(batch.batch_id == this.batch_id) {
+                          console.log('foreach')
+                          batch.student.push(id)
+                          bat.push(batch)
+                        }
+                        else {
+                          bat.push(batch)
+                        }
+                      })
+                      firebaseApp.db.collection('admin').doc('pTA42ixCblHbbKcYQ2ft').update({batch: bat})
+                      this.$router.push("/", this.$router.go());
+                    })
+                  }
+                  else {
+                    firebaseApp.db.collection('teacher').doc(this.creator).get().then((add) => {
+                        var bat = [];
+                      add.data().batch.forEach((batch) =>{
+                        if(batch.batch_id == this.batch_id) {
+                          console.log('foreach')
+                          batch.student.push(id)
+                          bat.push(batch)
+                        }
+                        else {
+                          bat.push(batch)
+                        }
+                      })
+                      firebaseApp.db.collection('teacher').doc(this.creator).update({batch: bat})
+                      this.$router.push("/", this.$router.go());
+                    })
+                  }
                 firebaseApp.db
                   .collection("count")
                   .doc("ZvZXwyhhYes2VSMCyYTD")
@@ -499,9 +536,9 @@ export default {
                       .collection("count")
                       .doc("ZvZXwyhhYes2VSMCyYTD")
                       .update({ teacher: counter });
+                      this.$router.push('/', this.$router.go('/'))
                   });
               }
-              this.$router.push("/", this.$router.go());
             } else {
               this.invalid = true;
             }
@@ -538,7 +575,41 @@ export default {
                 localStorage.setItem("type", this.type);
                 localStorage.setItem("logged", true);
                 localStorage.setItem("id", id);
-
+                if(this.creator == 'admin') {
+                  console.log('here')
+                    firebaseApp.db.collection('admin').doc('pTA42ixCblHbbKcYQ2ft').get().then((add) => {
+                        var bat = [];
+                      add.data().batch.forEach((batch) =>{
+                        if(batch.batch_id == this.batch_id) {
+                          console.log('foreach')
+                          batch.student.push(id)
+                          bat.push(batch)
+                        }
+                        else {
+                          bat.push(batch)
+                        }
+                      })
+                      firebaseApp.db.collection('admin').doc('pTA42ixCblHbbKcYQ2ft').update({batch: bat})
+                      this.$router.push("/", this.$router.go());
+                    })
+                  }
+                  else {
+                    firebaseApp.db.collection('teacher').doc(this.creator).get().then((add) => {
+                        var bat = [];
+                      add.data().batch.forEach((batch) =>{
+                        if(batch.batch_id == this.batch_id) {
+                          console.log('foreach')
+                          batch.student.push(id)
+                          bat.push(batch)
+                        }
+                        else {
+                          bat.push(batch)
+                        }
+                      })
+                      firebaseApp.db.collection('teacher').doc(this.creator).update({batch: bat})
+                      this.$router.push("/", this.$router.go());
+                    })
+                  }
                 localStorage.setItem("name", this.name);
                 firebaseApp.db
                   .collection("count")
@@ -580,9 +651,9 @@ export default {
                       .collection("count")
                       .doc("ZvZXwyhhYes2VSMCyYTD")
                       .update({ teacher: counter });
+                      this.$router.push('/', this.$router.go())
                   });
               }
-              this.$router.push("/", this.$router.go());
             } else {
               this.invalid = true;
             }
