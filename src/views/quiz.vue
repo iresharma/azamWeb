@@ -4,7 +4,7 @@
             <div class="column is-6" id="fuck"></div>
             <div class="column is-6">
                 <strong style="font-size: 45px">Quizes available</strong><br><br><br>
-                <div class="columns" style="text-align: left" v-for="quizs in quiz" :key="quizs.id">
+                <div class="columns" style="text-align: left">
                     <div class="column">
                         <Strong style="font-size: 25px">Quiz Name: {{ quizs.title }}</Strong><br><br>
                         Quiz info: {{ quizs.subtitle }}<br><br>
@@ -27,7 +27,7 @@
                                 Choose a file…
                             </span>
                         </span>
-                        <span class="file-name">
+                        <span v-if="answer != null" class="file-name">
                             {{ answer.name }}
                         </span>
                     </label>
@@ -47,6 +47,8 @@
                     max="100"
                 ></progress>
             </div>
+
+                    <a @click="uploadans(quizs.id)" class="button is-rounded is-success">Upload Ans</a>
             </div>
         </div>
     </div>
@@ -72,10 +74,11 @@ export default {
     data() {
         return {
             student: {},
-            quiz: [],
+            quizs: {},
             answer: null,
             uploadValue: 0,
-            uploadObj: {}
+            uploadObj: {},
+            upload: false,
         }
     },
     beforeMount() {
@@ -92,7 +95,7 @@ export default {
         })
     },
     methods: {
-        upload(id) {
+        uploadans(id) {
             var storage = firebaseApp.storageBucket.ref(`answers/${localStorage.getItem('name')}/${id}`).put(this.answer)
             storage.on('state_change', (snapshot) => {
                 this.uploadValue = (snapshot.bytesTransferred)/(snapshot.totalBytes)*100
