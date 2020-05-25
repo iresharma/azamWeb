@@ -180,7 +180,7 @@ export default {
         .doc(this.teacher.tid)
         .onSnapshot((doc) => {
           this.teacher.batch = doc.data().batch;
-          this.teacher.quizes = doc.data().quiz;
+          this.teacher.quizes = doc.data().quizes;
           this.teacher.tid = doc.id;
           this.teacher.passHash = doc.data().passHash;
         });

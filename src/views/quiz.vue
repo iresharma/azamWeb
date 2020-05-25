@@ -88,7 +88,7 @@ export default {
             firebaseApp.db.collection('quiz').where('batch', 'in', this.student.batch).onSnapshot((quizes) => {
                 if(!quizes.empty) {
                     quizes.forEach((quiz) => {
-                        this.quiz.push(quiz.data())
+                        this.quiz = quiz.data()
                     })
                 }
             })

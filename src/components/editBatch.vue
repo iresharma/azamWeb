@@ -28,7 +28,12 @@
         <small class="text-muted" style="font-size: 2vh"
           >No. of students: {{ batch.student.length }}</small
         >
-        <a class="button is-success is-inverted">Add Students</a>
+        <a @click="addStudent()" v-if="!show" class="button is-success is-inverted">Add Students</a>
+        <div style="margin: 5px;" v-if="show" class="tokenn notification is-primary is-light;">
+            <button class="delete" @click="show = false"></button>
+              token <br>
+            <strong>{{ token }}</strong>
+        </div>
       </div>
     </h1>
     <table style="margin-top: 20px" class="table is-fullwidth is-hoverable">
@@ -70,6 +75,8 @@ export default {
   data() {
     return {
       studen: [],
+      token: '',
+      show: false
     };
   },
   props: {
@@ -144,6 +151,28 @@ export default {
           firebaseApp.db.collection(type).doc(tid).update({batch: bat})
         })
     },
+    addStudent() {
+      var result = "";
+        var characters =
+          "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        var charactersLength = characters.length;
+        for (var i = 0; i < 6; i++) {
+          result += characters.charAt(
+            Math.floor(Math.random() * charactersLength)
+          );
+        }
+        this.token = result;
+        this.show = true
+        var type = localStorage.getItem('type')
+        firebaseApp.db.collection('token').doc(result).set({
+          creator: type,
+          type: 'student',
+          token: result,
+          batch: this.batch.batch_id,
+          nTotal: 1,
+          nUse: 0
+        })
+    }
   },
 };
 </script>
