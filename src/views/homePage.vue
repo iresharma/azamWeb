@@ -28,12 +28,29 @@
       </div>
     </div>
     <div class="columns wow fadeIn">
-      <div class="columns">
-        <img src="../assets/teach.svg" width="80%" alt="" />
+      <div class="column is-6">
+        <img src="../assets/teach.svg" width="100%" alt="" />
       </div>
-      <div id="fuck1" class="column">
+      <div class="column is-6">
+        <table class="table is-bordered">
+        <tr>
+          <th style="text-align: center" @click="contact = false">
+            Notice
+          </th>
+          <th style="text-align: center" @click="contact = true">
+            Contact
+          </th>
+        </tr>
+      </table>
+      <div v-if="!contact">
+        <strong style="font-size: 45px">Notices</strong><br>
+        <ul style="width: 60%; margin: 0 20% 0 20%">
+          <li style="border-bottom: 1px dashed grey; color: red" v-for="notice in notices" :key="notice">{{ notice }}</li>
+        </ul>
+      </div>
+      <div v-if="contact" id="fuck1" >
         <h1 id="tittle-c">Contact Me</h1>
-        <form action="" method="POST" id="tex-fo">
+        <form  id="tex-fo">
           <div class="form-group">
             <input
               name="name"
@@ -41,6 +58,7 @@
               type="text"
               style="font-family: Barlow, sans-serif;"
               placeholder="Name"
+              v-model="contactme.name"
             />
           </div>
           <div class="form-group" id="tex-fo">
@@ -50,6 +68,7 @@
               type="email"
               style="font-family: Barlow, sans-serif;"
               placeholder="Email"
+              v-model="contactme.email"
             />
           </div>
           <div class="form-group" id="tex-fo">
@@ -59,6 +78,7 @@
               type="tel"
               style="font-family: Barlow, sans-serif;"
               placeholder="Phone Number"
+              v-model="contactme.tel"
             />
           </div>
           <div class="form-group" id="tex-fo">
@@ -68,6 +88,7 @@
               type="text"
               style="font-family: Barlow, sans-serif;"
               placeholder="Subject"
+              v-model="contactme.sub"
             />
           </div>
           <div class="form-group" id="tex-fo">
@@ -76,18 +97,20 @@
               class="form-control"
               style="height: 99px;font-family: Barlow, sans-serif;"
               placeholder="Info"
+              v-model="contactme.info"
             ></textarea>
           </div>
           <div id="button-c-c">
-            <button
+            <a
               class="btn btn-primary float-right"
               id="button-c"
-              type="submit"
+              @click="contactMe()"
             >
               Submit
-            </button>
+            </a>
           </div>
         </form>
+      </div>
       </div>
     </div>
   </div>
@@ -164,7 +187,7 @@
 }
 
 #button-c:hover {
-  background-color: rgb(255, 255, 255);
+  background-color: transparent;
   color: #323232;
   text-decoration: none;
 }
@@ -231,14 +254,33 @@
 </style>
 
 <script>
+import firebaseApp from '../firebaseConfig'
 export default {
   data() {
     return {
       logged: "",
+      contact: false,
+      notices: [],
+      contactme: {}
     };
   },
   beforeMount() {
     this.logged = localStorage.getItem("logged");
+    firebaseApp.db.collection('notice').onSnapshot((doc) => {
+      if(!doc.empty) {
+        doc.forEach((notices) => {
+          this.notices.push(notices.data().notice)
+        })
+      }
+      else {
+        this.notices = ['hello']
+      }
+    })
   },
+  methods: {
+    contactMe() {
+      firebaseApp.db.collection('contact').doc().set(this.contactme)
+    }
+  }
 };
 </script>
