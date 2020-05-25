@@ -435,7 +435,7 @@ export default {
         let user = snapshot.user;
         var pass = prompt("Enter a password");
         var passHash = sha256(pass);
-        return firebaseApp.db
+        firebaseApp.db
           .collection(this.type)
           .where("email", "==", user.email)
           .get()
