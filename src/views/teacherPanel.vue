@@ -71,7 +71,9 @@
             <startClass v-if="comp == 3" />
             <quiz v-if="comp == 2" />
             <notice v-if="comp == 7" />
-            <contact v-if="comp == 5" />
+            <div class="columns">
+                <contact v-if="comp == 5" />
+            </div>
         </div>
     </div>
 </template>

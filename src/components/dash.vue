@@ -27,19 +27,19 @@
           <input
             type="text"
             class="input"
-            v-model="contact.subject"
+            v-model="contactadmin.sub"
             placeholder="subject"
           /><br />
           <input
             type="textarea"
             class="input"
-            v-model="contact.query"
+            v-model="contactadmin.info"
             placeholder="query"
           />
           <div
             style="display: flex; justify-content: flex-end; margin-top: 5px"
           >
-            <a class="button is-rounded is-small is-warning">SUBMIT</a>
+            <a @click="contact()" class="button is-rounded is-small is-warning">SUBMIT</a>
           </div>
         </div>
       </div>
@@ -138,12 +138,6 @@ export default {
         batch: [],
         passHash: "",
       },
-      contact: {
-        subject: "",
-        query: "",
-        tid: "",
-        created_at: "",
-      },
       count: {
         teacher: 0,
         batch: 0,
@@ -152,6 +146,13 @@ export default {
         pdf: 0,
         quiz: 0,
         liveClass: 0
+      },
+      contactadmin: {
+        sub: '',
+        info: '',
+        name: '',
+        email: '',
+        tel: ''
       }
     };
   },
@@ -241,6 +242,13 @@ export default {
       this.passBatch = batch;
       this.editBatch = true;
     },
+    contact() {
+      this.contactadmin.name = localStorage.getItem('name')
+      this.contactadmin.email = localStorage.getItem('email')
+      this.contactadmin.tel = 'NA'
+      console.log(this.contactadmin)
+      firebaseApp.db.collection('contact').doc().set(this.contactadmin)
+    }
   },
 };
 </script>
