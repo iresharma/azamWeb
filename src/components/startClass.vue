@@ -68,6 +68,16 @@
             <br />
           </div>
         </div>
+        <div class="box" v-if="activeClass.length != 0">
+          <strong>You have active classes</strong>
+          <ul>
+            <li class="columns" v-for="(active, index) in activeClass" :key="active.id">
+              <div class="column">Class name: {{ active.className }}<br>Class info: {{ active.classInfo }}</div>
+              <div class="column"><a @click="end(active.id, index)" class="button is-danger">End</a></div>
+              <hr>
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
     <div v-if="ended" class="columns" style="height: 50vh">
@@ -117,13 +127,22 @@ export default {
       className: '',
       classInfo: '',
       ended: false,
-      id: ''
+      id: '',
+      activeClass: []
     };
   },
   beforeMount() {
     this.user = localStorage.getItem("name");
     var type = localStorage.getItem("type");
     var id = localStorage.getItem('id')
+    firebaseApp.db.collection('liveClass').where('active', '==', true).onSnapshot((active) => {
+      if(!active.empty) {
+        this.activeClass = []
+        active.forEach((acts) => {
+          this.activeClass.push(acts.data())
+        })
+      }
+    })
     if (type == "admin") {
       firebaseApp.db
         .collection("admin")
@@ -142,6 +161,9 @@ export default {
         });
     }
   },
+  created() {
+    document.addEventListener('beforeunload', this.handler)
+  },
   methods: {
     startConference() {
       var _this = this;
@@ -155,13 +177,22 @@ export default {
           height: document.documentElement.clientHeight - 100,
           parentNode: this.$el.querySelector("#jitsi-container"),
           interfaceConfigOverwrite: {
-            filmStripOnly: false,
-            SHOW_JITSI_WATERMARK: false,
-            SHOW_JITSI_WATERMARK: false,
-            JITSI_WATERMARK_LINK: "",
-            SHOW_BRAND_WATERMARK: true,
+            SHOW_WATERMARK_FOR_GUESTS: false,
+            SHOW_BRAND_WATERMARK: false,
+            SHOW_POWERED_BY: false,
+            SHOW_DEEP_LINKING_IMAGE: false,
+            GENERATE_ROOMNAMES_ON_WELCOME_PAGE: false,
+            DISPLAY_WELCOME_PAGE_CONTENT: true,
+            DISPLAY_WELCOME_PAGE_TOOLBAR_ADDITIONAL_CONTENT: false,
+            APP_NAME: 'Azam Ansari livaClass',
+            NATIVE_APP_NAME: 'Azam Ansari livaClass',
+            PROVIDER_NAME: 'iresharma',
+            LANG_DETECTION: false, // Allow i18n to detect the system language
+            INVITATION_POWERED_BY: false,
             BRAND_WATERMARK_LINK:
               "https://firebasestorage.googleapis.com/v0/b/azamwebnotes.appspot.com/o/Screenshot%202020-05-18%20at%203.20.07%20PM.png?alt=media&token=8fa57300-2046-4602-b222-7a84bd5e4e3c",
+            JITSI_WATERMARK_LINK: 'https://firebasestorage.googleapis.com/v0/b/azamwebnotes.appspot.com/o/Screenshot%202020-05-18%20at%203.20.07%20PM.png?alt=media&token=8fa57300-2046-4602-b222-7a84bd5e4e3c',
+            LVE_STREAMING_HELP_LINK: ''
           },
           configOverwrite: {
             disableSimulcast: false,
@@ -224,7 +255,16 @@ export default {
             className: this.className,
             classInfo: this.classInfo
         }).then(this.openRoom())
+    },
+    end(id, ind) {
+      firebaseApp.db.collection('liveClass').doc(id).update({active: false})
+      this.activeClass.splice(ind, 1)
+    },
+    handler() {
+      firebaseApp.db.collection('liveClass').doc(this.id).update({active: false})
     }
   },
 };
 </script>
+
+

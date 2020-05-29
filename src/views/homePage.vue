@@ -268,6 +268,7 @@ export default {
     this.logged = localStorage.getItem("logged");
     firebaseApp.db.collection('notice').onSnapshot((doc) => {
       if(!doc.empty) {
+        this.notices = []
         doc.forEach((notices) => {
           this.notices.push(notices.data().notice)
         })

@@ -2,7 +2,7 @@
   <nav class="navbar" role="navigation" aria-label="main navigation">
   <div class="navbar-brand">
     <span style="font-size: 37px;border-bottom: 2px dashed red"
-        >Azam Anzari</span
+        >Azam Ansari</span
       >
   </div>
   <div>

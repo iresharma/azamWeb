@@ -1,9 +1,9 @@
 <template>
-    <div class="box" style="margin: .5%; text-align: left">
+    <div class="box" style="margin: .5%; text-align: left; width: 100%">
         <h1 style="font-weight:600; font-size: 3vh; ">Contact responses<br>
             <small class="text-muted" style="font-size: 2vh">Responses from various contact forms</small>
         </h1>
-            <div style="width: 65%; margin: 10px" v-for="contacts in contact" :key="contacts.id">
+            <div style="width: 80%; margin: 10px" v-for="contacts in contact" :key="contacts.id">
                 <div class="notification">
                     <button class="delete" @click="deleted(contacts.id)"></button>
                     <strong>{{ contacts.data.name }}</strong><br>

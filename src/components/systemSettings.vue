@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="columns">
-            <div class="column is-6">
+            <!-- <div class="column is-6">
                 <div class="box">
                     <article class="media">
                         <div class="media-left">
@@ -31,7 +31,7 @@
                         </div>
                     </article>
                 </div>
-            </div>
+            </div> -->
             <div class="column is-6">
                 <div class="box">
                     <article class="media">
@@ -154,8 +154,9 @@ export default {
             this.admin = response.data()
             console.log(this.admin)
         })
-        firebaseApp.db.collection('count').doc('ZvZXwyhhYes2VSMCyYTD').onSnapshot((doc) => {
+        firebaseApp.db.collection('count').doc('ZvZXwyhhYes2VSMCyYTD').get().then((doc) => {
             this.count = doc.data()
+            console.log(doc.data())
         })
         firebaseApp.db.collection('teacher').orderBy('id').limit(10).onSnapshot((doc) => {
             this.teachers = []

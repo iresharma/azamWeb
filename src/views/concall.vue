@@ -123,6 +123,7 @@ export default {
       .get()
       .then((doc) => {
         this.batches = doc.data().batch;
+        console.log(doc.data())
         this.batches.forEach((batch) => {
           firebaseApp.db
             .collection("liveClass")
@@ -130,6 +131,7 @@ export default {
             .where("active", "==", true)
             .onSnapshot((classes) => {
               if (!classes.empty) {
+                console.log(classes)
                 classes.forEach((classac) => {
                   this.activeBatch = classac.data().batch;
                   this.classname = classac.data().className;
@@ -145,6 +147,22 @@ export default {
             });
         });
       });
+
+      // firebaseApp.db.collection("liveClass").where('active', '==', true).get().then((classes) => {
+      //   console.log('get', classes.empty)
+      //   if(!classes.empty) {
+      //     classes.forEach((classac) => {
+      //       this.classname = classac.data().className;
+      //       this.classinfo = classac.data().classInfo;
+      //       this.room = classac.data().id;
+      //       if (!classac.data().active && this.ready) {
+      //         this.$el.querySelector("#jitsi-container").style.display =
+      //           "none";
+      //         this.ended = true;
+      //       }
+      //     })
+      //   }
+      // })
   },
   methods: {
     startConference() {
