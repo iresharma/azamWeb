@@ -2,7 +2,7 @@
   <div>
     <div class="columns wow fadeIn">
       <div style="padding: 0; height: 91vh; background: #f3f3f3" class="column">
-        <img src="../assets/logo.png" height="100%" alt="" />
+        <img src="../assets/logoed.png" height="100%" alt="" />
       </div>
       <div class="column side">
         <div class="headingd">Education doesn't stop</div>

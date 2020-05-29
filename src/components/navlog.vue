@@ -2,7 +2,7 @@
   <nav class="navbar" role="navigation" aria-label="main navigation">
   <div class="navbar-brand">
     <span style="font-size: 37px;border-bottom: 2px dashed red"
-        >Azam Ansari</span
+        >Md. Azam Ansari</span
       >
   </div>
   <div>
@@ -62,7 +62,8 @@
                 : photo
             "
             @click="drop = !drop"
-            style="height: 5vh; width: 5vh; border-radius: 100%"
+            style="border-radius: 100%"
+            class="is-64x64"
           />
           <div v-if="drop">
             <a @click="addBatch()" class="dropdown-item aim">Join batch</a>

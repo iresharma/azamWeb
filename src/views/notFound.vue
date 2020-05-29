@@ -14,16 +14,3 @@
   height: 90vh;
 }
 </style>
-
-<script>
-export default {
-  data() {
-    return {
-      logged: "",
-    };
-  },
-  beforeMount() {
-    this.logged = localStorage.getItem("looged");
-  },
-};
-</script>
