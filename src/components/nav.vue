@@ -21,6 +21,9 @@
       <a @click="$router.push('/class')" class="navbar-item">
         Live Class
       </a>
+      <a @click="$router.push('/notice')" class="navbar-item">
+        Important notice
+      </a>
     </div>
     <div class="navbar-end">
       <div class="navbar-item">

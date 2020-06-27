@@ -188,30 +188,6 @@ export default {
           },
           configOverwrite: {
             disableSimulcast: false,
-            disableDeepLinking: true,
-
-            disableAP: true,
-            disableAEC: true,
-            disableNS: true,
-            disableAGC: true,
-            disableHPF: true,
-            stereo: true,
-            enableLipSync: false,
-            remoteVideoMenu: {
-        // If set to true the 'Kick out' button will be disabled.
-                disableKick: true
-            },
-            resolution: 180,
-            constraints: {
-                video: {
-                    aspectRatio: 16 / 9,
-                    height: {
-                        ideal: 180,
-                        max: 180,
-                        min: 180
-                    }
-                }
-            },
           },
         };
 

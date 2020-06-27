@@ -27,6 +27,9 @@
       <a v-if="type == 'teacher' || type == 'admin'" @click="$router.push('/panel')" class="navbar-item">
         Teacher Panel
       </a>
+      <a @click="$router.push('/notice')" class="navbar-item">
+        Important notice
+      </a>
 
       <div class="navbar-item has-dropdown is-hoverable">
         <a class="navbar-link">

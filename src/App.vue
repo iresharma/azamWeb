@@ -51,7 +51,6 @@ footer {
 }
 </style>
 
-
 <script>
 import navbar from './components/nav.vue'
 import navbarlog from './components/navlog.vue'

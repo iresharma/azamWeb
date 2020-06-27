@@ -9,7 +9,9 @@
         <div class="subheadingd">
           During these difficult times we continue our education online,<br />through
           <span class="cover">videos</span> and
-          <span class="cover">pdf notes.</span>
+          <span class="cover">pdf notes.</span><br>
+          I have been teaching student for a long time, I have an amazing record of most 100/100 every year.
+          For info about new batches, refer to <span class="cover">notices</span>.
         </div>
         <div class="btnalign">
           <a
@@ -272,9 +274,6 @@ export default {
         doc.forEach((notices) => {
           this.notices.push(notices.data().notice)
         })
-      }
-      else {
-        this.notices = ['hello']
       }
     })
   },

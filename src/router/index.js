@@ -11,6 +11,7 @@ import ViewVideo from '../views/viewVideo'
 import conCall from '../views/concall.vue'
 import teacher from '../views/teacherPanel.vue'
 import quiz from '../views/quiz.vue'
+import notice from '../views/notice.vue'
 
 Vue.use(VueRouter)
 
@@ -64,6 +65,11 @@ Vue.use(VueRouter)
     path: '/quiz',
     name: 'Quiz',
     component: quiz
+  },
+  {
+    path: '/notice',
+    name: 'Notice',
+    component: notice
   },
   {
     path: '*',
