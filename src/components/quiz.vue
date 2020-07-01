@@ -95,8 +95,15 @@
       <tr v-for="(active, index) in activeQuiz" :key="active">
         <td>{{ active.data().title }}</td>
         <td>{{ idtoname(active.data().batch) }}</td>
-        <td><a @click="change(active.id, index)" class="button is-success">View</a></td>
-        <td><a class="button is-link">Upload solution</a></td>
+        <td>
+          <a @click="change(active.id, index)" class="button is-success"
+            >View</a
+          >
+        </td>
+        <td>
+          <a @click="uploadSol()" class="button is-link">Upload solution</a>
+          <input type="file" hidden @change="up($event.target.files[0], index)" id="hey">
+        </td>
         <td><a class="button is-danger">Remove</a></td>
       </tr>
     </table>
@@ -105,13 +112,13 @@
     <div class="columns">
       <div class="column is-1">
         <svg
-        @click="view = !view"
-        class="bi bi-arrow-left aim"
-        width="3em"
-        height="3em"
-        viewBox="0 0 16 16"
-        fill="red"
-        xmlns="http://www.w3.org/2000/svg"
+          @click="view = !view"
+          class="bi bi-arrow-left aim"
+          width="3em"
+          height="3em"
+          viewBox="0 0 16 16"
+          fill="red"
+          xmlns="http://www.w3.org/2000/svg"
         >
           <path
             fill-rule="evenodd"
@@ -126,8 +133,11 @@
         </svg>
       </div>
     </div>
-    <h1 style="font-weight:600; font-size: 5vh; ">{{ head.data().title }}<br>
-        <small class="text-muted" style="font-size: 2vh">{{ head.data().subtitle }}</small>
+    <h1 style="font-weight:600; font-size: 5vh; ">
+      {{ head.data().title }}<br />
+      <small class="text-muted" style="font-size: 2vh">{{
+        head.data().subtitle
+      }}</small>
     </h1>
     <table class="table">
       <tr>
@@ -136,7 +146,9 @@
       </tr>
       <tr v-for="che in check" :key="che.id">
         <td>{{ che.id }}</td>
-        <td><a target="_blank" :href="che.src" class="button is-success">View</a></td>
+        <td>
+          <a target="_blank" :href="che.src" class="button is-success">View</a>
+        </td>
       </tr>
     </table>
   </div>
@@ -170,7 +182,7 @@ export default {
       activeQuiz: [],
       view: false,
       check: [],
-      head: {}
+      head: {},
     };
   },
   beforeMount() {
@@ -184,18 +196,20 @@ export default {
         .then((doc) => {
           this.teacher = doc.data();
         });
-      firebaseApp.db.collection('quiz').where('tid', '==', 'admin').onSnapshot(quizes => {
-        if(quizes.empty) {
-          this.activeQuiz.push({
-            'name': 'No active quizes'
-          })
-        }
-        else {
-          quizes.forEach(quiz => {
-            this.activeQuiz.push(quiz)
-          })
-        }
-      })
+      firebaseApp.db
+        .collection("quiz")
+        .where("tid", "==", "admin")
+        .onSnapshot((quizes) => {
+          if (quizes.empty) {
+            this.activeQuiz.push({
+              name: "No active quizes",
+            });
+          } else {
+            quizes.forEach((quiz) => {
+              this.activeQuiz.push(quiz);
+            });
+          }
+        });
     } else {
       firebaseApp.db
         .collection("teacher")
@@ -237,10 +251,10 @@ export default {
             storageRef.snapshot.ref.getDownloadURL().then((url) => {
               this.pdf.src = url;
               this.teacher.batch.forEach((batch) => {
-                if(batch.name == this.batches) {
-                  this.pdf.batch = batch.batch_id
+                if (batch.name == this.batches) {
+                  this.pdf.batch = batch.batch_id;
                 }
-              })
+              });
               this.pdf.id = Math.random()
                 .toString(34)
                 .substring(2, 8);
@@ -267,30 +281,61 @@ export default {
       }
     },
     idtoname(id) {
-      var x = ''
-      this.teacher.batch.forEach(batch => {
-        if(batch.batch_id == id) {
-          x = batch.name
+      var x = "";
+      this.teacher.batch.forEach((batch) => {
+        if (batch.batch_id == id) {
+          x = batch.name;
         }
-      })
-      console.log(x)
-      return x
+      });
+      console.log(x);
+      return x;
     },
     change(id, ind) {
-      this.view = true
-      this.head = this.activeQuiz[ind]
-      console.log(this.head)
-      firebaseApp.db.collection('qAnswers').where('qid', '==', id).onSnapshot(ans => {
-        this.check = []
-        if(ans.empty) {
-          console.log('empty')
-        }
-        else {
-          ans.forEach(answ => {
-            this.check.push(answ.data())
+      this.view = true;
+      this.head = this.activeQuiz[ind];
+      console.log(this.head);
+      firebaseApp.db
+        .collection("qAnswers")
+        .where("qid", "==", id)
+        .onSnapshot((ans) => {
+          this.check = [];
+          if (ans.empty) {
+            console.log("empty");
+          } else {
+            ans.forEach((answ) => {
+              this.check.push(answ.data());
+            });
+          }
+        });
+    },
+    uploadSol() {
+      this.$el.querySelector('#hey').click()
+    },
+    up(file, ind) {
+      var id = Math.random().toString(34).substring(2, 8);
+      console.log(id)
+      var pdf = {
+        'title': this.activeQuiz[ind].data().title + '- SOLUTION',
+        'subtitle': this.activeQuiz[ind].data().subtitle,
+        'src': '',
+        'id': id
+      }
+      var storageRef = firebaseApp.storageBucket.ref(`pdf/${this.activeQuiz[ind].data().title} - SOLUTION`).put(file)
+      storageRef.on(
+        `state_changed`,
+        snapshot => {
+          console.log((snapshot.bytesTransferred/snapshot.totalBytes) + 100)
+        },
+        error => {
+          console.error(error)
+        },
+        () => {
+          storageRef.snapshot.ref.getDownloadURL().then(url => {
+            console.log(url)
+            pdf.src = url
+            firebaseApp.db.collection('pdf').doc(id).set(pdf)
           })
-        }
-      })
+        })
     }
   },
 };

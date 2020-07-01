@@ -41,7 +41,7 @@ export default {
       .doc(this.nid)
       .get()
       .then((pdf) => {
-        console.log(pdf.data);
+        console.log(pdf.data());
         this.pdf = pdf.data();
       });
   },
