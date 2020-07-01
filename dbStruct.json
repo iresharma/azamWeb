@@ -74,35 +74,23 @@
         "nUse": 1,
         "type": ""
     },
-    "quiz": {
-        "eid": "",
-        "questions": "",
-        "batch": "batch_id"
+    "count": {
+        "student": 0,
+        "teacher": 0,
+        "quiz": 0,
+        "pdf": 0,
+        "video": 0,
+        "docref": "ZvZXwyhhYes2VSMCyYTD"
     },
-    {
-        "answers": {
-            "id": "eid",
-            "students": [
-                {
-                    "sid": "",
-                    "ans": [
-                        {
-                            "id": "qid",
-                            "ans": "ans"
-                        }
-                    ]
-                }
-            ]
-        }
-    },
-    {
-        "count": {
-            "student": 0,
-            "teacher": 0,
-            "quiz": 0,
-            "pdf": 0,
-            "video": 0,
-            "docref": "ZvZXwyhhYes2VSMCyYTD"
-        }
+    "quiz" :{
+        "name": "",
+        "link": "",
+        "batch": "bid",
+        "answer": [
+            {
+                "sName": "",
+                "link": ""
+            }
+        ]
     }
 }

@@ -47,6 +47,8 @@ export default {
     },
     beforeMount() {
         firebaseApp.db.collection('notice').onSnapshot(notices => {
+
+            this.notices = []
             if(!notices.empty) {
                 notices.forEach(h => this.notices.push(h))
             }

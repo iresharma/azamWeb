@@ -2,8 +2,8 @@
     <div>
      <div style="text-align: left;padding: 2.5%">
         <h1 style="font-weight:600; font-size: 3vh; ">Videos<br>
-        <small class="text-muted" style="font-size: 2vh">Video lectures</small>
-    </h1>
+            <small class="text-muted" style="font-size: 2vh">Video lectures</small>
+        </h1>
     </div>
     <div class="columns is-multiline" >
         <div class="column is-one-quarter" v-for="videos in video" :key="videos.id" style="padding:2.5%">

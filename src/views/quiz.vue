@@ -1,125 +1,137 @@
 <template>
     <div>
-        <div v-if="!upload" class="columns">
-            <div class="column is-6" id="fuck"></div>
-            <div class="column is-6">
-                <strong style="font-size: 45px">Quizes available</strong><br><br><br>
-                <div class="columns" style="text-align: left">
-                    <div class="column">
-                        <Strong style="font-size: 25px">Quiz Name: {{ quizs.title }}</Strong><br><br>
-                        Quiz info: {{ quizs.subtitle }}<br><br>
-                    </div>
-                    <div class="column"><a :href="quizs.src" class="button is-success is-rounded">Downlosd question</a><br><a @click="upload = true" class="button is-info is-rounded">Downlosd question</a></div>
-                </div>
+        <div class="columns">
+            <div class="column">
+
             </div>
-        </div>
-        <div id="fuck2" v-if="upload" class="columns">
-            <div class="column is-6"></div>
-            <div class="column is-6">
-                <div class="file has-name">
-                    <label class="file-label">
-                        <input @change="answer = $event.target.files[0];uploadValue = 0;" class="file-input" type="file" name="resume">
+            <div class="column">
+                <h1 style="font-weight:600; font-size: 5vh; ">Quizes<br>
+                    <small class="text-muted" style="font-size: 2vh">Currently active Quizes</small>
+                </h1>
+                <div style="margin: 15px" class="notification" v-for="quiz in quizes" :key="quiz.name">
+                    {{ quiz.data().title }} <br>
+                    <span class="text-muted">{{ quiz.data().subtitle }}</span>
+                    <div v-if="!allow" style="display: flex; flex-direction: row; justify-content: space-evenly; margin: 20px">
+                        <a :href="quiz.data().src" target="_blank" class="button is-success is-rounded">Download Questions</a>
+                        <div class="file has-name">
+                        <label class="file-label">
+                        <input
+                            class="file-input"
+                            type="file"
+                            name="pdfnote"
+                            @change="
+                            upload = $event.target.files[0];
+                            uploadValue = 0;
+                            "
+                        />
                         <span class="file-cta">
                             <span class="file-icon">
-                                <i class="fas fa-upload"></i>
+                            <i class="fas fa-upload"></i>
                             </span>
                             <span class="file-label">
-                                Choose a file…
+                            Choose a file…
                             </span>
                         </span>
-                        <span v-if="answer != null" class="file-name">
-                            {{ answer.name }}
+                        <span v-if="upload !== null" class="file-name">
+                            {{ upload.name }}
                         </span>
-                    </label>
+                        </label>
+                    </div>
+                    </div>
+                    <div v-if="upload !== null" style="margin: 10px;">
+                        <div style="display: flex; justify-content: space-between">
+                        <big class="muted-text"
+                            >Progress: {{ uploadValue.toFixed() + "%" }}</big
+                        >
+                        <small v-if="pdfNotes !== null" class="muted-text">{{
+                            bytesToSize(upload.size)
+                        }}</small>
+                        </div>
+                        <progress
+                        class="progress is-success"
+                        :value="uploadValue"
+                        max="100"
+                        ></progress>
+                    </div>
+                    <a v-if="upload !== null" @click="uploadmeth(quiz.id)" class="button is-link is-rounded">Confirm</a>
                 </div>
-                <div style="margin: 10px;">
-                <div style="display: flex; justify-content: space-between">
-                <big class="muted-text"
-                    >Progress: {{ uploadValue.toFixed() + "%" }}</big
-                >
-                <small v-if="answer !== null" class="muted-text">{{
-                    bytesToSize(answer.size)
-                }}</small>
-                </div>
-                <progress
-                    class="progress is-success"
-                    :value="uploadValue"
-                    max="100"
-                ></progress>
-            </div>
-
-                    <a @click="uploadans(quizs.id)" class="button is-rounded is-success">Upload Ans</a>
             </div>
         </div>
     </div>
 </template>
 
 <style scoped>
-#fuck {
-    background-image: url('../assets/svg/student.svg');
-    background-size: contain;
+.column {
     height: 80vh;
-    background-position: center center;
 }
-#fuck2 {
+.column:nth-child(1) {
     background-image: url('../assets/svg/uploadquizstu.svg');
     background-size: contain;
-    height: 78vh;
+    background-position: center center;
+    height: 80vh;
 }
 </style>
 
+
 <script>
-import firebaseApp from '../firebaseConfig'
+import firebaseApp from  '../firebaseConfig'
 export default {
+    nme: 'Quiz student',
     data() {
         return {
-            student: {},
-            quizs: {},
-            answer: null,
-            uploadValue: 0,
-            uploadObj: {},
-            upload: false,
+            quizes: [],
+            allow: false,
+            upload: null,
+            uploadValue: 0
         }
     },
     beforeMount() {
-        var id = localStorage.getItem('id')
-        firebaseApp.db.collection('student').doc(id).get().then((student) => {
-            this.student = student.data()
-            firebaseApp.db.collection('quiz').where('batch', 'in', this.student.batch).onSnapshot((quizes) => {
-                if(!quizes.empty) {
-                    quizes.forEach((quiz) => {
-                        this.quiz = quiz.data()
+        firebaseApp.db.collection('student').doc(localStorage.getItem('id')).get().then(doc => {
+            var stu = doc.data().batch[0]
+            console.log('hi>',stu)
+            firebaseApp.db.collection('quiz').where('batch', '==', stu).get().then(quizes => {
+                console.log(quizes)
+                if(quizes.empty) {
+                    this.allow = true
+                    this.quizes = [{
+                        "title": "No active quizes currently"
+                    }]
+                }
+                else {
+                    quizes.forEach(quiz => {
+                        console.log(quiz.data())
+                        this.quizes.push(quiz)
                     })
                 }
             })
         })
     },
     methods: {
-        uploadans(id) {
-            var storage = firebaseApp.storageBucket.ref(`answers/${localStorage.getItem('name')}/${id}`).put(this.answer)
-            storage.on('state_change', (snapshot) => {
-                this.uploadValue = (snapshot.bytesTransferred)/(snapshot.totalBytes)*100
-            },
-            (error) => {
-                console.error(error.message)
-            },
-            () => {
-                storage.snapshot.ref.getDownloadURL().then((url) => {
-                    var name = localStorage.getItem('name')
-                    firebaseApp.db.collection('answer').doc().set({
-                        src: url,
-                        name: name,
-                        qid: id
-                    })
-                })
-            })
-        },
         bytesToSize(bytes) {
             var sizes = ["Bytes", "KB", "MB", "GB", "TB"];
             if (bytes == 0) return "0 Byte";
-                var i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
+            var i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
             return Math.round(bytes / Math.pow(1024, i), 2) + " " + sizes[i];
         },
+        uploadmeth(id) {
+            const storageRef = firebaseApp.storageBucket.ref(`quizAns/${this.upload.name}`).put(this.upload);
+            var qAns = {}
+            storageRef.on('state_changed', snapshot => {
+                this.uploadValue = (snapshot.bytesTransferred/snapshot.totalBytes) * 100;
+            },
+            error => {
+                console.log(error)
+            },
+            () => {
+                this.uploadValue = 100
+                storageRef.snapshot.ref.getDownloadURL().then((url) => {
+                    qAns.src = url
+                    qAns.qid = id
+                    qAns.id = localStorage.getItem('id')
+                    firebaseApp.db.collection('qAnswers').doc().set(qAns)
+                })
+            })
+        }
     }
 }
 </script>
