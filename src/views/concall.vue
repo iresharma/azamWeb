@@ -31,6 +31,20 @@
               style="margin-bottom:8px; margin-top: 20px; padding-top:0px;"
             >
               <button
+              v-if="classname == ''"
+                disabled
+                class="button is-rounded is-large"
+                style="background-color: #ffdd57;color: black"
+                @click="
+                  ready = true;
+                  openRoom();
+                "
+                id="submit-id-submit"
+              >
+                Join
+              </button>
+              <button
+                v-else
                 class="button is-rounded is-large"
                 style="background-color: #ffdd57;color: black"
                 @click="
