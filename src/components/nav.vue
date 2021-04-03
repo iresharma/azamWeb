@@ -15,7 +15,7 @@
 
   <div id="navbarBasicExample" :class="show2">
     <div class="navbar-start">
-      <a class="navbar-item">
+      <a @click="$router.push('/')"class="navbar-item">
         Home
       </a>
       <a @click="$router.push('/class')" class="navbar-item">
